@@ -14,7 +14,7 @@ const sidebarStore = useSidebarStore()
 </script>
 
 <template>
-  <div :data-theme="themeStore.isDark ? 'dark' : 'light'">
+  <div>
     <Loading />
     <ToastContainer />
 

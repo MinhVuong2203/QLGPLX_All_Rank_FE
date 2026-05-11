@@ -564,8 +564,7 @@ const closeEditModal = () => {
 
 const handleUpdateKyThi = async () => {
   try {
-    showLoading()
-
+    localStorage.show()
     if (new Date(editModel.value.ngayKetThuc) < new Date(editModel.value.ngayBatDau)) {
       toastStore.show('Ngày kết thúc phải sau ngày bắt đầu', 'warning', 'Dữ liệu không hợp lệ')
 
@@ -584,7 +583,7 @@ const handleUpdateKyThi = async () => {
 
     toastStore.show('Không thể cập nhật kỳ thi', 'error', 'Lỗi hệ thống')
   } finally {
-    hideLoading()
+    loadingStore.hide()
   }
 }
 </script>

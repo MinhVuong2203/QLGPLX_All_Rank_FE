@@ -42,3 +42,94 @@ npm run build
 ```sh
 npm run lint
 ```
+
+```
+QLGPLX_All_Rank_FE
+├─ .editorconfig
+├─ .oxlintrc.json
+├─ .prettierrc.json
+├─ eslint.config.js
+├─ index.html
+├─ jsconfig.json
+├─ package-lock.json
+├─ package.json
+├─ public
+│  └─ favicon.ico
+├─ README.md
+├─ src
+│  ├─ App.vue
+│  ├─ assets
+│  │  ├─ css
+│  │  │  ├─ app.css
+│  │  │  ├─ congdan
+│  │  │  │  ├─ ds_congdan.css
+│  │  │  │  └─ them_cong_dan.css
+│  │  │  ├─ hoso
+│  │  │  │  ├─ ds-ho-so.css
+│  │  │  │  └─ them-ho-so.css
+│  │  │  ├─ ketqua
+│  │  │  │  └─ ketqua.css
+│  │  │  └─ kythi
+│  │  │     ├─ kythi-css.css
+│  │  │     ├─ them-ho-so-vao-ky-thi.css
+│  │  │     └─ them-ky-thi.css
+│  │  ├─ data
+│  │  │  └─ tinh_tp.json
+│  │  ├─ icon
+│  │  │  └─ gif
+│  │  │     └─ loading.gif
+│  │  ├─ image
+│  │  └─ logo.svg
+│  ├─ components
+│  │  ├─ common
+│  │  │  ├─ ConfirmDialog.vue
+│  │  │  ├─ ConfirmModal.vue
+│  │  │  ├─ Loading.vue
+│  │  │  └─ ToastContainer.vue
+│  │  ├─ HelloWorld.vue
+│  │  ├─ icons
+│  │  │  ├─ IconCommunity.vue
+│  │  │  ├─ IconDocumentation.vue
+│  │  │  ├─ IconEcosystem.vue
+│  │  │  ├─ IconSupport.vue
+│  │  │  └─ IconTooling.vue
+│  │  ├─ layout
+│  │  │  ├─ Footer.vue
+│  │  │  ├─ Header.vue
+│  │  │  ├─ MainLayout.vue
+│  │  │  └─ NavMenu.vue
+│  │  ├─ TheWelcome.vue
+│  │  └─ WelcomeItem.vue
+│  ├─ main.js
+│  ├─ models
+│  ├─ router
+│  │  └─ index.js
+│  ├─ services
+│  │  ├─ api.js
+│  │  └─ congdanService.js
+│  ├─ stores
+│  │  ├─ counter.js
+│  │  ├─ loadingStore.js
+│  │  ├─ sidebarStore.js
+│  │  ├─ themeStore.js
+│  │  └─ toastStore.js
+│  ├─ utils
+│  │  └─ helper.js
+│  └─ views
+│     ├─ congdan
+│     │  ├─ DSCongDan.vue
+│     │  ├─ SuaCongDan.vue
+│     │  └─ ThemCongDan.vue
+│     ├─ HomeView.vue
+│     ├─ hoso
+│     │  ├─ DSHoso.vue
+│     │  └─ ThemHoso.vue
+│     ├─ ketqua
+│     │  └─ KetquaView.vue
+│     └─ kythi
+│        ├─ DSKythi.vue
+│        ├─ ThemHosoKythi.vue
+│        └─ ThemKythi.vue
+└─ vite.config.js
+
+```

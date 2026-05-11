@@ -116,6 +116,18 @@ watch(
         </lord-icon>
         <span class="nav-label"> KỲ THI </span>
       </router-link>
+
+      <router-link to="/ket-qua" class="nav-item" active-class="active">
+        <lord-icon
+          src="https://cdn.lordicon.com/noncoqhc.json"
+          trigger="hover"
+          stroke="bold"
+          colors="primary:#242424,secondary:#e83a30"
+          class="nav-icon"
+        >
+        </lord-icon>
+        <span class="nav-label"> KẾT QUẢ </span>
+      </router-link>
     </nav>
   </aside>
 </template>

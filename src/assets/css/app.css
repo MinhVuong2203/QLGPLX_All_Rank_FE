@@ -62,6 +62,7 @@
   --table-text-secondary: #64748b;
   --table-border: #e2e8f0;
   --table-striped: #f8fafc;
+  --modal-bg: rgb(255, 255, 255);
 }
 
 /* ── CHẾ ĐỘ TỐI ── */
@@ -100,6 +101,7 @@
   --table-text-secondary: #94a3b8;
   --table-border: #273449;
   --table-striped: #161f32;
+  --modal-bg: rgba(11, 15, 26, 0.95);
 }
 
 /* ── RESET & CƠ BẢN ── */

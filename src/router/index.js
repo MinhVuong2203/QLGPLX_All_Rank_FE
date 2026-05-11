@@ -8,6 +8,7 @@ import ThemHoso from '@/views/hoso/ThemHoso.vue'
 import DSKythi from '@/views/kythi/DSKythi.vue'
 import ThemKythi from '@/views/kythi/ThemKythi.vue'
 import ThemHosoKythi from '@/views/kythi/ThemHosoKythi.vue'
+import KetquaView from '@/views/ketqua/KetquaView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -57,6 +58,11 @@ const router = createRouter({
       name: 'ThemHoSoKyThi',
       component: ThemHosoKythi,
     },
+    {
+      path: '/ket-qua',
+      name: 'KetQua',
+      component: KetquaView,
+    }
   ],
 })
 
