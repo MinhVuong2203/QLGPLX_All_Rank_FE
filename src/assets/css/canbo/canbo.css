@@ -1,0 +1,778 @@
+.canbo-page {
+  padding: 24px;
+  color: var(--text-primary);
+}
+
+.canbo-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top left, var(--accent-glow), transparent 34%), var(--bg-surface);
+  box-shadow: var(--shadow-md);
+}
+
+.canbo-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  margin-bottom: 10px;
+  border-radius: 999px;
+  background: var(--accent-light);
+  color: var(--accent-hover);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.canbo-hero h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.canbo-hero p {
+  margin-top: 8px;
+  max-width: 680px;
+  color: var(--text-secondary);
+}
+
+.canbo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 14px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.canbo-btn:hover {
+  transform: translateY(-1px);
+}
+
+.canbo-btn-primary {
+  color: white;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  box-shadow: 0 10px 24px var(--accent-glow);
+}
+
+.canbo-btn-soft {
+  color: var(--text-primary);
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border);
+}
+
+.canbo-btn-danger {
+  color: white;
+  background: var(--danger);
+}
+
+.canbo-toolbar {
+  display: grid;
+  grid-template-columns: 1fr 210px auto;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.canbo-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.canbo-search i {
+  color: var(--text-secondary);
+}
+
+.canbo-search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  background: transparent;
+  font-family: var(--font-body);
+}
+
+.canbo-select {
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  font-family: var(--font-body);
+  outline: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.canbo-card,
+.canbo-form-card,
+.canbo-permission-card,
+.canbo-profile-card {
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-md);
+}
+
+.canbo-card {
+  overflow: hidden;
+}
+
+.canbo-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.canbo-card-header h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 20px;
+}
+
+.canbo-card-header p {
+  margin-top: 4px;
+  color: var(--text-secondary);
+}
+
+.canbo-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.canbo-table {
+  min-width: 1100px;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.canbo-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.canbo-avatar,
+.canbo-profile-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--accent), #9333ea);
+  color: white;
+  font-weight: 800;
+}
+
+.canbo-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.canbo-avatar img,
+.canbo-profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.canbo-name {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.canbo-username,
+.canbo-sub {
+  margin-top: 3px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.canbo-contact {
+  font-weight: 600;
+}
+
+.canbo-role {
+  display: inline-flex;
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.canbo-status {
+  display: inline-flex;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.canbo-status-active {
+  color: #047857;
+  background: rgba(16, 185, 129, 0.13);
+}
+
+.canbo-status-lock {
+  color: #b91c1c;
+  background: rgba(239, 68, 68, 0.13);
+}
+
+.canbo-permission-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: 999px;
+  color: var(--accent-hover);
+  background: var(--accent-light);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.canbo-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.canbo-icon-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-primary);
+  background: var(--bg-surface-2);
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.canbo-icon-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+
+.canbo-icon-btn.danger:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.canbo-empty {
+  padding: 70px 24px;
+  text-align: center;
+}
+
+.canbo-empty i {
+  font-size: 56px;
+  color: var(--text-secondary);
+}
+
+.canbo-empty h3 {
+  margin-top: 14px;
+  font-family: var(--font-display);
+}
+
+.canbo-empty p {
+  margin-top: 8px;
+  color: var(--text-secondary);
+}
+
+.canbo-form-card {
+  padding: 26px;
+}
+
+.canbo-form-section + .canbo-form-section {
+  margin-top: 28px;
+  padding-top: 26px;
+  border-top: 1px solid var(--border);
+}
+
+.canbo-section-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.canbo-section-title i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+  color: white;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+}
+
+.canbo-section-title h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 20px;
+}
+
+.canbo-section-title p {
+  margin-top: 4px;
+  color: var(--text-secondary);
+}
+
+.canbo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.canbo-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.canbo-field label {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.canbo-field label span {
+  color: var(--danger);
+}
+
+.canbo-field input,
+.canbo-field select {
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  outline: none;
+  color: var(--text-primary);
+  background: var(--input-bg);
+  font-family: var(--font-body);
+  transition:
+    border var(--transition),
+    box-shadow var(--transition);
+}
+
+.canbo-field input:focus,
+.canbo-field select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+.canbo-field small {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.canbo-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.canbo-switch-field {
+  justify-content: flex-end;
+}
+
+.canbo-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  min-height: 48px;
+  padding: 0 16px 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  background: var(--bg-surface-2);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.canbo-switch span {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--danger);
+}
+
+.canbo-switch.active span {
+  background: var(--success);
+}
+
+.canbo-permission-layout {
+  display: grid;
+  grid-template-columns: 330px minmax(0, 1fr);
+  gap: 22px;
+}
+
+.canbo-profile-card {
+  padding: 24px;
+  height: fit-content;
+  text-align: center;
+}
+
+.canbo-profile-avatar {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 16px;
+  border-radius: 28px;
+  font-size: 34px;
+}
+
+.canbo-profile-card h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+}
+
+.canbo-profile-card > p {
+  margin-top: 6px;
+  color: var(--text-secondary);
+}
+
+.canbo-profile-info {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+  text-align: left;
+}
+
+.canbo-profile-info div {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-surface-2);
+}
+
+.canbo-profile-info span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.canbo-profile-info strong {
+  word-break: break-word;
+}
+
+.canbo-permission-card {
+  overflow: hidden;
+}
+
+.canbo-permission-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  padding: 24px;
+}
+
+.canbo-permission-item {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--bg-surface-2);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.canbo-permission-item:hover,
+.canbo-permission-item.active {
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.canbo-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--border-hover);
+  border-radius: 11px;
+  color: white;
+  background: var(--bg-surface);
+}
+
+.canbo-permission-item.active .canbo-check {
+  border-color: var(--accent);
+  background: var(--accent-hover);
+}
+
+.canbo-permission-item h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.canbo-permission-item p {
+  margin-top: 6px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.canbo-permission-item code {
+  display: inline-flex;
+  margin-top: 10px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  color: var(--accent-hover);
+  background: var(--accent-light);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.canbo-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(8px);
+}
+
+.canbo-confirm {
+  width: min(440px, 100%);
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--modal-bg);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+.canbo-confirm-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 16px;
+  border-radius: 18px;
+  color: white;
+  background: var(--danger);
+  font-size: 24px;
+}
+
+.canbo-confirm h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+}
+
+.canbo-confirm p {
+  margin-top: 10px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.canbo-confirm-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.canbo-upload-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px;
+  border: 1px dashed var(--border-hover);
+  border-radius: 18px;
+  background: var(--bg-surface-2);
+}
+
+.canbo-upload-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 86px;
+  height: 108px;
+  overflow: hidden;
+  border-radius: 14px;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.canbo-upload-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.canbo-upload-preview i {
+  font-size: 34px;
+}
+
+.canbo-upload-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.canbo-upload-content .canbo-btn {
+  width: fit-content;
+}
+
+.canbo-upload-content p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.canbo-file-input {
+  display: none;
+}
+
+/* Phân trang */
+.canbo-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-surface);
+}
+
+.canbo-pagination-info {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.canbo-pagination-info strong {
+  color: var(--text-primary);
+}
+
+.canbo-pagination-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.canbo-page-size {
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  background: var(--bg-surface-2);
+  font-family: var(--font-body);
+  outline: none;
+}
+
+.canbo-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  background: var(--bg-surface-2);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.canbo-page-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.canbo-page-btn.active {
+  color: white;
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
+}
+
+.canbo-page-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1100px) {
+  .canbo-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .canbo-permission-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .canbo-page {
+    padding: 16px;
+  }
+
+  .canbo-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 22px;
+  }
+
+  .canbo-grid,
+  .canbo-permission-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .canbo-form-actions,
+  .canbo-confirm-actions {
+    flex-direction: column-reverse;
+  }
+
+  .canbo-btn {
+    width: 100%;
+  }
+}

@@ -29,4 +29,15 @@ export const Helper = {
     if (format === 'yyyy-MM-dd') return `${year}-${month}-${day}`
     return date
   },
+
+  formatAddress(address) {
+    if (!address) return '-'
+    // Thay thế dấu # thành dấu phẩy
+    return address.replace(/ #/g, ',')
+  },
+
+  formatUpperCase(text) {
+    if (!text) return ''
+    return text.toUpperCase()
+  }
 }

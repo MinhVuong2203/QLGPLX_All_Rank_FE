@@ -15,8 +15,7 @@ const sidebarStore = useSidebarStore()
 
 <template>
   <div>
-    <Loading />
-    <ToastContainer />
+   
 
     <div class="app-shell" :class="{ 'sidebar-collapsed': sidebarStore.collapsed }">
       <NavMenu />

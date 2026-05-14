@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+import { useAuthStore } from '@/stores/authStore'
+import { useToastStore } from '@/stores/toastStore'
 import { useThemeStore } from '@/stores/themeStore'
 import { useSidebarStore } from '@/stores/sidebarStore'
 
@@ -11,6 +14,18 @@ const showDropdown = ref(false)
 
 const toggleDropdown = () => {
   showDropdown.value = !showDropdown.value
+}
+
+const router = useRouter()
+const authStore = useAuthStore()
+const toastStore = useToastStore()
+
+const handleLogout = async () => {
+  await authStore.logout()
+
+  toastStore.show('Đăng xuất thành công', 'success', 'Thành công')
+
+  router.push('/login')
 }
 </script>
 
@@ -43,18 +58,25 @@ const toggleDropdown = () => {
       </button>
 
       <div class="header-user" @click="toggleDropdown">
-        <div class="user-avatar">A</div>
+        <img class="user-avatar" v-if="authStore.avatar" :src="authStore.avatar" alt="Avatar" />
+
+        <div v-else class="user-avatar">
+          {{ authStore.hoTen?.charAt(0)?.toUpperCase() || 'C' }}
+        </div>
 
         <div class="user-info">
-          <span class="user-name">Admin</span>
-          <span class="user-role">Quản trị viên</span>
+          <span class="user-name">{{ authStore.hoTen || authStore.username }}</span>
+          <span class="user-role">{{ authStore.canBo?.tenChucVu }}</span>
         </div>
 
         <div v-if="showDropdown" class="user-dropdown">
           <a href="#">Hồ sơ</a>
-          <a href="#">Cài đặt</a>
-          <hr />
-          <a href="#">Đăng xuất</a>
+          <!-- <a href="#">Cài đặt</a> -->
+          <!-- <hr /> -->
+          <button class="header-logout-btn" @click="handleLogout">
+            <i class="bi bi-box-arrow-right"></i>
+            Đăng xuất
+          </button>
         </div>
       </div>
     </div>
