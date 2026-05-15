@@ -88,7 +88,7 @@
 
               <tbody>
                 <tr
-                  v-for="cd in danhSachCongDan"
+                  v-for="cd in paginatedCongDan"
                   :key="cd.maCongDan"
                   @click="toggleCongDan(cd.maCongDan)"
                 >
@@ -127,6 +127,34 @@
                 </tr>
               </tbody>
             </table>
+
+            <div v-if="danhSachCongDan.length > pageSize" class="pagination-bar">
+              <div class="pagination-info">
+                Hiển thị {{ pageStart }}-{{ pageEnd }} / {{ danhSachCongDan.length }}
+              </div>
+
+              <div class="pagination-actions">
+                <button type="button" :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">
+                  Trước
+                </button>
+                <button
+                  v-for="page in totalPages"
+                  :key="page"
+                  type="button"
+                  :class="{ active: page === currentPage }"
+                  @click="goToPage(page)"
+                >
+                  {{ page }}
+                </button>
+                <button
+                  type="button"
+                  :disabled="currentPage === totalPages"
+                  @click="goToPage(currentPage + 1)"
+                >
+                  Sau
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -234,8 +262,10 @@ const hideLoading = () => {
 
 // Filter
 const onlyNoHoso = ref(false)
-const onlyToday = ref(false)
+const onlyToday = ref(true)
 const searchCCCD = ref('')
+const currentPage = ref(1)
+const pageSize = 10
 
 onMounted(() => {
   loadData()
@@ -283,6 +313,7 @@ const loadCongDan = async () => {
     }
 
     danhSachCongDan.value = response.data
+    currentPage.value = 1
   } catch (err) {
     console.error(err)
 
@@ -294,6 +325,26 @@ const loadCongDan = async () => {
 
 const onFilterChanged = async () => {
   await loadCongDan()
+}
+
+const totalPages = computed(() => Math.max(1, Math.ceil(danhSachCongDan.value.length / pageSize)))
+
+const paginatedCongDan = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+
+  return danhSachCongDan.value.slice(start, start + pageSize)
+})
+
+const pageStart = computed(() => {
+  if (!danhSachCongDan.value.length) return 0
+
+  return (currentPage.value - 1) * pageSize + 1
+})
+
+const pageEnd = computed(() => Math.min(currentPage.value * pageSize, danhSachCongDan.value.length))
+
+const goToPage = (page) => {
+  currentPage.value = Math.min(Math.max(page, 1), totalPages.value)
 }
 
 const hasHosoWithSelectedHang = (id) => {
@@ -318,7 +369,7 @@ const toggleAllCongDan = (event) => {
   const isChecked = event.target.checked
 
   if (isChecked) {
-    danhSachCongDan.value.forEach((cd) => {
+    paginatedCongDan.value.forEach((cd) => {
       if (
         !hasHosoWithSelectedHang(cd.maCongDan) &&
         !selectedCongDans.value.includes(cd.maCongDan)
@@ -332,9 +383,9 @@ const toggleAllCongDan = (event) => {
 }
 
 const isAllSelected = computed(() => {
-  if (!danhSachCongDan.value.length) return false
+  if (!paginatedCongDan.value.length) return false
 
-  const available = danhSachCongDan.value.filter((cd) => !hasHosoWithSelectedHang(cd.maCongDan))
+  const available = paginatedCongDan.value.filter((cd) => !hasHosoWithSelectedHang(cd.maCongDan))
 
   return available.every((cd) => selectedCongDans.value.includes(cd.maCongDan))
 })

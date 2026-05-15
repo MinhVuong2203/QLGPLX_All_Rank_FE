@@ -92,7 +92,7 @@
 
         <div class="ky-thi-grid">
           <div
-            v-for="kyThi in filteredKyThi"
+            v-for="kyThi in paginatedKyThi"
             :key="kyThi.kyThiID"
             :class="['ky-thi-card', getStatusClass(kyThi.trangThai)]"
           >
@@ -165,6 +165,34 @@
                 Xóa
               </button>
             </div>
+          </div>
+        </div>
+
+        <div v-if="filteredKyThi.length > pageSize" class="pagination-bar">
+          <div class="pagination-info">
+            Hiển thị {{ pageStart }}-{{ pageEnd }} / {{ filteredKyThi.length }}
+          </div>
+
+          <div class="pagination-actions">
+            <button type="button" :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">
+              Trước
+            </button>
+            <button
+              v-for="page in totalPages"
+              :key="page"
+              type="button"
+              :class="{ active: page === currentPage }"
+              @click="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+            <button
+              type="button"
+              :disabled="currentPage === totalPages"
+              @click="goToPage(currentPage + 1)"
+            >
+              Sau
+            </button>
           </div>
         </div>
       </template>
@@ -354,7 +382,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '@/services/api'
 import MainLayout from '@/components/layout/MainLayout.vue'
@@ -371,6 +399,8 @@ const danhSachHang = ref([])
 const searchText = ref('')
 const filterTrangThai = ref('')
 const filterMaHang = ref('')
+const currentPage = ref(1)
+const pageSize = 9
 
 const showDetailModal = ref(false)
 const showEditModal = ref(false)
@@ -390,6 +420,30 @@ const filteredKyThi = computed(() => {
 
     return matchSearch && matchStatus && matchHang
   })
+})
+
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredKyThi.value.length / pageSize)))
+
+const paginatedKyThi = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+
+  return filteredKyThi.value.slice(start, start + pageSize)
+})
+
+const pageStart = computed(() => {
+  if (!filteredKyThi.value.length) return 0
+
+  return (currentPage.value - 1) * pageSize + 1
+})
+
+const pageEnd = computed(() => Math.min(currentPage.value * pageSize, filteredKyThi.value.length))
+
+const goToPage = (page) => {
+  currentPage.value = Math.min(Math.max(page, 1), totalPages.value)
+}
+
+watch([searchText, filterTrangThai, filterMaHang], () => {
+  currentPage.value = 1
 })
 
 const countByStatus = computed(() => (status) => {

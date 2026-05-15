@@ -9,26 +9,32 @@
     <div class="login-shell">
       <div class="login-brand-panel">
         <div class="login-logo">
-          <i class="bi bi-shield-lock-fill"></i>
+          <!-- <i class="bi bi-shield-lock-fill"></i> -->
+          <img src="@/assets/image/logo.png" alt="Logo" class="login-logo-image" />
         </div>
 
-        <h1>QLGPLX</h1>
-        <p>Hệ thống quản lý giấy phép lái xe dành cho cán bộ.</p>
+        <h1>Ứng dụng Quản lý GPLX</h1>
+        <p>Hệ thống quản lý giấy phép lái xe tất cả các hạng</p>
 
         <div class="login-feature-list">
           <div>
             <i class="bi bi-check-circle-fill"></i>
-            Quản lý hồ sơ đăng ký
+            Thủ tục hồ sơ đơn giản & nhanh chóng
           </div>
 
           <div>
             <i class="bi bi-check-circle-fill"></i>
-            Quản lý kỳ thi sát hạch
+            Kỳ thi sát hạch linh hoạt, đa dạng
           </div>
 
           <div>
             <i class="bi bi-check-circle-fill"></i>
-            Phân quyền cán bộ
+            Cấp giấy phép lái xe điện tử tiện lợi
+          </div>
+
+          <div>
+            <i class="bi bi-check-circle-fill"></i>
+            Hỗ trợ tra cứu thông tin nhanh chóng
           </div>
         </div>
       </div>
@@ -36,10 +42,15 @@
       <form class="login-card" @submit.prevent="handleLogin">
         <div class="login-card-header">
           <div class="login-card-icon">
-            <i class="bi bi-person-badge-fill"></i>
+            <lord-icon
+              src="https://cdn.lordicon.com/bqlcwfjd.json"
+              trigger="loop"
+              colors="primary:#2660e5,secondary:#ee66aa"
+              style="width:250px;height:250px">
+          </lord-icon>
           </div>
-
-          <h2>Đăng nhập cán bộ</h2>
+          
+          <h2>Đăng nhập</h2>
           <p>Nhập tài khoản được cấp để truy cập hệ thống.</p>
         </div>
 
@@ -82,10 +93,15 @@
 
         <button type="submit" class="login-submit">
           <span>Đăng nhập</span>
-          <i class="bi bi-arrow-right-circle-fill"></i>
+          <lord-icon
+            src="https://cdn.lordicon.com/usydzudq.json"
+            trigger="loop"
+            colors="primary:#d4d1fa,secondary:#fad1e6"
+            style="width:26px;height:26px">
+          </lord-icon>
         </button>
 
-        <div class="login-note">Chỉ cán bộ được cấp tài khoản mới có thể truy cập hệ thống.</div>
+        <div class="login-note">Chỉ cán bộ được cấp tài khoản mới có thể thao tác</div>
       </form>
     </div>
   </div>

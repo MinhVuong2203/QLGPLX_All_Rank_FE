@@ -417,36 +417,24 @@
   transition: all var(--transition);
 }
 
-.btn-action svg {
-  width: 18px;
-  height: 18px;
+.btn-action lord-icon {
+  width: 22px;
+  height: 22px;
 }
 
 .btn-view:hover {
-  background: #eff6ff;
+  background: color-mix(in srgb, #3b82f6 14%, var(--bg-surface-2));
   border-color: #3b82f6;
 }
 
-.btn-view:hover svg {
-  stroke: #3b82f6;
-}
-
 .btn-edit:hover {
-  background: #fef3c7;
+  background: color-mix(in srgb, var(--warning) 18%, var(--bg-surface-2));
   border-color: var(--warning);
 }
 
-.btn-edit:hover svg {
-  stroke: var(--warning);
-}
-
 .btn-delete:hover {
-  background: #fee2e2;
+  background: color-mix(in srgb, var(--danger) 14%, var(--bg-surface-2));
   border-color: var(--danger);
-}
-
-.btn-delete:hover svg {
-  stroke: var(--danger);
 }
 
 /* ── BUTTONS ── */

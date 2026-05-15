@@ -153,7 +153,7 @@
             </thead>
 
             <tbody>
-              <tr v-for="hs in filteredList" :key="hs.hoSoId">
+              <tr v-for="hs in paginatedList" :key="hs.hoSoId">
                 <td>
                   <span class="id-badge"> #{{ hs.hoSoId }} </span>
                 </td>
@@ -191,16 +191,78 @@
 
                 <td>
                   <div class="action-buttons">
-                    <button class="btn-action btn-view" @click="openViewModal(hs)">Xem</button>
+                    <button
+                      class="btn-action btn-view"
+                      title="Xem"
+                      aria-label="Xem hồ sơ"
+                      @click="openViewModal(hs)"
+                    >
+                      <lord-icon
+                        src="https://cdn.lordicon.com/ylfhstue.json"
+                        trigger="hover"
+                        stroke="bold"
+                    
+                      />
+                    </button>
 
-                    <button class="btn-action btn-edit" @click="openEditModal(hs)">Sửa</button>
+                    <button
+                      class="btn-action btn-edit"
+                      title="Sửa"
+                      aria-label="Sửa hồ sơ"
+                      @click="openEditModal(hs)"
+                    >
+                      <lord-icon
+                        src="https://cdn.lordicon.com/vysppwvq.json"
+                        trigger="hover"
+                        stroke="bold"
+                      />
+                    </button>
 
-                    <button class="btn-action btn-delete" @click="confirmDelete(hs)">Xóa</button>
+                    <button
+                      class="btn-action btn-delete"
+                      title="Xóa"
+                      aria-label="Xóa hồ sơ"
+                      @click="confirmDelete(hs)"
+                    >
+                      <lord-icon
+                        src="https://cdn.lordicon.com/tftntjtg.json"
+                        trigger="hover"
+                        stroke="bold"
+                      />
+                    </button>
                   </div>
                 </td>
               </tr>
             </tbody>
           </table>
+
+          <div v-if="filteredList.length > pageSize" class="pagination-bar">
+            <div class="pagination-info">
+              Hiển thị {{ pageStart }}-{{ pageEnd }} / {{ filteredList.length }}
+            </div>
+
+            <div class="pagination-actions">
+              <button type="button" :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">
+                Trước
+              </button>
+              <button
+                v-for="page in totalPages"
+                :key="page"
+                type="button"
+                :class="{ active: page === currentPage }"
+                @click="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+              <button
+                type="button"
+                :disabled="currentPage === totalPages"
+                @click="goToPage(currentPage + 1)"
+              >
+                Sau
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -434,7 +496,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import api from '@/services/api'
 import MainLayout from '@/components/layout/MainLayout.vue'
 
@@ -462,6 +524,8 @@ const searchText = ref('')
 const filterStatus = ref('')
 const filterHang = ref('')
 const filterPayment = ref('')
+const currentPage = ref(1)
+const pageSize = 10
 
 // Modal
 const showViewModal = ref(false)
@@ -535,6 +599,30 @@ const filteredList = computed(() => {
   return filtered.sort((a, b) => new Date(b.ngayNop) - new Date(a.ngayNop))
 })
 
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredList.value.length / pageSize)))
+
+const paginatedList = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+
+  return filteredList.value.slice(start, start + pageSize)
+})
+
+const pageStart = computed(() => {
+  if (!filteredList.value.length) return 0
+
+  return (currentPage.value - 1) * pageSize + 1
+})
+
+const pageEnd = computed(() => Math.min(currentPage.value * pageSize, filteredList.value.length))
+
+const goToPage = (page) => {
+  currentPage.value = Math.min(Math.max(page, 1), totalPages.value)
+}
+
+watch([searchText, filterStatus, filterHang, filterPayment], () => {
+  currentPage.value = 1
+})
+
 const getCountByStatus = (status) => {
   return danhSachHoSo.value.filter((h) => h.trangThai === status).length
 }
@@ -571,6 +659,7 @@ const resetFilters = () => {
   filterStatus.value = ''
   filterHang.value = ''
   filterPayment.value = ''
+  currentPage.value = 1
 }
 
 // ================= VIEW =================

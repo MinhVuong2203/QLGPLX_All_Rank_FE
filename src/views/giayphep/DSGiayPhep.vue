@@ -297,9 +297,9 @@
                   </div>
                 </td>
                 <td>
-                  <span class="gp-badge" :class="getStatusClass(gp.trangThai)">
+                  <span class="gp-badge" :class="getStatusClass(getDisplayStatus(gp))">
                     <span class="gp-badge-icon"></span>
-                    {{ gp.trangThai }}
+                    {{ getDisplayStatus(gp) }}
                   </span>
                 </td>
                 <td>
@@ -499,7 +499,7 @@ async function fetchData() {
       totalPages: result.totalPages,
     }
   } catch (error) {
-    toastStore.addToast('Lỗi khi tải danh sách giấy phép', 'error')
+    toastStore.error('Lỗi khi tải danh sách giấy phép')
   } finally {
     loadingStore.hide()
   }
@@ -586,6 +586,30 @@ function formatDate(dateString) {
   const [year, month, day] = dateString.split('-')
 
   return `${day}/${month}/${year}`
+}
+
+function getDisplayStatus(license) {
+  if (license.trangThai === 'Chờ duyệt' || license.trangThai === 'Chá» duyá»‡t') {
+    return 'Chờ duyệt'
+  }
+
+  if ((license.soDiem ?? 0) === 0) return 'Bị thu hồi'
+
+  if (isExpired(license.ngayHetHan)) return 'Hết hạn'
+
+  return 'Còn hiệu lực'
+}
+
+function isExpired(dateString) {
+  if (!dateString) return false
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const expiredDate = new Date(dateString)
+  expiredDate.setHours(0, 0, 0, 0)
+
+  return expiredDate < today
 }
 
 function getStatusClass(status) {

@@ -77,6 +77,13 @@
               class="search-input"
             />
           </div>
+
+          <select v-model="filterResult" class="result-filter-select">
+            <option value="">Tất cả kết quả</option>
+            <option value="Chưa thi">Chưa thi</option>
+            <option value="Đạt">Đạt</option>
+            <option value="Không đạt">Không đạt</option>
+          </select>
         </div>
 
         <div class="table-container">
@@ -93,7 +100,7 @@
             </thead>
 
             <tbody>
-              <tr v-for="hs in filteredList" :key="hs.hoSoID">
+              <tr v-for="hs in paginatedList" :key="hs.hoSoID">
                 <td>{{ hs.hoTen }}</td>
 
                 <td>{{ hs.cccd }}</td>
@@ -130,6 +137,34 @@
               </tr>
             </tbody>
           </table>
+
+          <div v-if="filteredList.length > pageSize" class="pagination-bar">
+            <div class="pagination-info">
+              Hiển thị {{ pageStart }}-{{ pageEnd }} / {{ filteredList.length }}
+            </div>
+
+            <div class="pagination-actions">
+              <button type="button" :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">
+                Trước
+              </button>
+              <button
+                v-for="page in totalPages"
+                :key="page"
+                type="button"
+                :class="{ active: page === currentPage }"
+                @click="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+              <button
+                type="button"
+                :disabled="currentPage === totalPages"
+                @click="goToPage(currentPage + 1)"
+              >
+                Sau
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -513,7 +548,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import api from '@/services/api'
 import MainLayout from '@/components/layout/MainLayout.vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
@@ -527,6 +562,9 @@ const kyThiList = ref([])
 const selectedKyThiId = ref('')
 const hoSoList = ref([])
 const searchQuery = ref('')
+const filterResult = ref('')
+const currentPage = ref(1)
+const pageSize = 10
 const showScoreModal = ref(false)
 const selectedHoSo = ref(null)
 const lanThiForms = ref([])
@@ -555,7 +593,35 @@ const filteredList = computed(() => {
     list = list.filter((x) => x.hoTen.toLowerCase().includes(q) || x.cccd.toLowerCase().includes(q))
   }
 
+  if (filterResult.value) {
+    list = list.filter((x) => (getLastResult(x) || 'Chưa thi') === filterResult.value)
+  }
+
   return list
+})
+
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredList.value.length / pageSize)))
+
+const paginatedList = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+
+  return filteredList.value.slice(start, start + pageSize)
+})
+
+const pageStart = computed(() => {
+  if (!filteredList.value.length) return 0
+
+  return (currentPage.value - 1) * pageSize + 1
+})
+
+const pageEnd = computed(() => Math.min(currentPage.value * pageSize, filteredList.value.length))
+
+const goToPage = (page) => {
+  currentPage.value = Math.min(Math.max(page, 1), totalPages.value)
+}
+
+watch([searchQuery, filterResult, selectedKyThiId], () => {
+  currentPage.value = 1
 })
 
 // ================= METHODS =================
@@ -578,6 +644,7 @@ const loadKetQua = async () => {
     const res = await api.get(`/api/KetQua/kythi/${selectedKyThiId.value}`)
 
     hoSoList.value = res.data
+    currentPage.value = 1
   } catch {
     toastStore.error('Không tải được kết quả')
   } finally {

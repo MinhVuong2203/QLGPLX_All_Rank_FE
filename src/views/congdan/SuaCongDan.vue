@@ -228,13 +228,18 @@ const fullAddress = computed(() => {
   return `${diaChiCuThe.value} # ${selectedPhuong.value} # ${selectedTinh.value}`
 })
 
-watch(selectedTinh, (newVal) => {
-  if (isLoadingData.value) return // Không reset khi đang load dữ liệu
+function normalizeAddressPart(value) {
+  return (value || '').trim().replace(/\s+/g, ' ')
+}
 
+watch(selectedTinh, (newVal) => {
   const tinh = tinhList.value.find((t) => t.tentinhmoi === newVal)
   phuongList.value = tinh?.phuongxa || []
-  selectedPhuong.value = ''
-})
+
+  if (!isLoadingData.value) {
+    selectedPhuong.value = ''
+  }
+}, { flush: 'sync' })
 
 onMounted(async () => {
   try {
@@ -271,7 +276,7 @@ onMounted(async () => {
 
       // Parse địa chỉ
       if (data.diaChi) {
-        const parts = data.diaChi.split('#').map((x) => x.trim())
+        const parts = data.diaChi.split('#').map(normalizeAddressPart)
         if (parts.length === 3) {
           diaChiCuThe.value = parts[0]
           const tempPhuong = parts[1]
@@ -283,7 +288,10 @@ onMounted(async () => {
           if (tinh) {
             phuongList.value = tinh.phuongxa
             // SAU ĐÓ mới set phường
-            selectedPhuong.value = tempPhuong
+            const phuong = phuongList.value.find(
+              (p) => normalizeAddressPart(p.tenphuongxa) === tempPhuong,
+            )
+            selectedPhuong.value = phuong?.tenphuongxa || tempPhuong
           }
         }
       }

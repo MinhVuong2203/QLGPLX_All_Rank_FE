@@ -2,12 +2,12 @@
   <aside class="sidebar">
     <div class="sidebar-brand">
       <div class="brand-logo">
-        <i class="bi bi-shield-check"></i>
+        <img src="@/assets/image/logo.png" alt="Logo" class="login-logo-image" />
       </div>
 
       <div class="brand-text">
         QLGPLX
-        <span class="brand-sub"> Admin Dashboard </span>
+        <span class="brand-sub"> Website administrator </span>
       </div>
     </div>
 
@@ -17,8 +17,10 @@
         :key="item.path"
         :to="item.path"
         class="nav-item"
-        active-class="active"
-        :class="{ 'no-permission': !hasPermission(item) }"
+        :class="{
+          active: isMenuItemActive(item, route.path),
+          'no-permission': !hasPermission(item),
+        }"
         @click="handleMenuClick($event, item)"
       >
         <lord-icon
@@ -51,6 +53,7 @@ import { useSidebarStore } from '@/stores/sidebarStore'
 import { useAuthStore } from '@/stores/authStore'
 import { onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { isMenuItemActive, menuItems } from '@/utils/navItems'
 
 const sidebarStore = useSidebarStore()
 const authStore = useAuthStore()
@@ -80,58 +83,6 @@ const handleMenuClick = (event, item) => {
 
   router.push(item.path)
 }
-
-const menuItems = [
-  {
-    path: '/',
-    label: 'TỔNG QUAN',
-    icon: 'https://cdn.lordicon.com/zldpstex.json',
-    permission: null,
-    state: null,
-  },
-  {
-    path: '/cong-dan',
-    label: 'CÔNG DÂN',
-    icon: 'https://cdn.lordicon.com/rzsnbiaw.json',
-    permissions: ['QUAN_LY_HO_SO', 'DUYET_HO_SO'],
-    state: 'morph-group',
-  },
-  {
-    path: '/ho-so',
-    label: 'HỒ SƠ',
-    icon: 'https://cdn.lordicon.com/iubtdgvu.json',
-    permissions: ['QUAN_LY_HO_SO', 'DUYET_HO_SO'],
-    state: null,
-  },
-  {
-    path: '/ky-thi',
-    label: 'KỲ THI',
-    icon: 'https://cdn.lordicon.com/noncoqhc.json',
-    permission: 'QUAN_LY_KY_THI',
-    state: null,
-  },
-  {
-    path: '/ket-qua',
-    label: 'KẾT QUẢ',
-    icon: 'https://cdn.lordicon.com/aapkxxza.json',
-    permission: 'NHAP_KET_QUA_THI',
-    state: null,
-  },
-  {
-    path: '/giay-phep',
-    label: 'GIẤY PHÉP',
-    icon: 'https://cdn.lordicon.com/xvfgwmmv.json',
-    permission: 'CAP_GPLX',
-    state: null,
-  },
-  {
-    path: '/can-bo',
-    label: 'CÁN BỘ',
-    icon: 'https://cdn.lordicon.com/xvfgwmmv.json',
-    permission: 'QUAN_LY_CAN_BO',
-    state: null,
-  },
-]
 
 onMounted(() => {
   document.querySelectorAll('.nav-item').forEach((item) => {

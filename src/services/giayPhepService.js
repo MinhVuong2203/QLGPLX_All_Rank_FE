@@ -1,7 +1,6 @@
 import api from './api'
 
 const giayPhepService = {
-  // Lấy danh sách giấy phép với phân trang
   async getAll(params = {}) {
     try {
       const response = await api.get('/api/GiayPhep', { params })
@@ -12,7 +11,6 @@ const giayPhepService = {
     }
   },
 
-  // Lấy chi tiết giấy phép
   async getById(id) {
     try {
       const response = await api.get(`/api/GiayPhep/${id}`)
@@ -23,7 +21,6 @@ const giayPhepService = {
     }
   },
 
-  // Tạo giấy phép mới
   async create(data) {
     try {
       const response = await api.post('/api/GiayPhep', data)
@@ -34,7 +31,6 @@ const giayPhepService = {
     }
   },
 
-  // Cập nhật giấy phép
   async update(id, data) {
     try {
       const response = await api.put(`/api/GiayPhep/${id}`, data)
@@ -45,7 +41,36 @@ const giayPhepService = {
     }
   },
 
-  // Lấy thống kê
+  async getLichSu(id) {
+    try {
+      const response = await api.get(`/api/GiayPhep/${id}/lich-su`)
+      return response.data
+    } catch (error) {
+      console.error('Error fetching license history:', error)
+      throw error
+    }
+  },
+
+  async duyet(id, data) {
+    try {
+      const response = await api.post(`/api/GiayPhep/${id}/duyet`, data)
+      return response.data
+    } catch (error) {
+      console.error('Error approving giay phep:', error)
+      throw error
+    }
+  },
+
+  async capLai(id, data) {
+    try {
+      const response = await api.post(`/api/GiayPhep/${id}/cap-lai`, data)
+      return response.data
+    } catch (error) {
+      console.error('Error reissuing giay phep:', error)
+      throw error
+    }
+  },
+
   async getStatistics() {
     try {
       const response = await api.get('/api/GiayPhep/statistics')
@@ -54,7 +79,7 @@ const giayPhepService = {
       console.error('Error fetching statistics:', error)
       throw error
     }
-  }
+  },
 }
 
 export default giayPhepService

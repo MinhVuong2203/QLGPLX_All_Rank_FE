@@ -527,6 +527,12 @@ body {
   width: var(--sidebar-collapsed-w);
 }
 
+.login-logo-image{
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+
 /* Thương hiệu sidebar */
 .sidebar-brand {
   display: flex;
@@ -541,11 +547,9 @@ body {
 }
 
 .brand-logo {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
-  background: var(--accent);
-  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1752,4 +1756,397 @@ body {
 .header-logout-btn:hover {
   color: var(--danger);
   border-color: var(--danger);
+}
+
+.header-profile-link {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+.header-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: grid;
+  place-items: start center;
+  padding: 88px 18px 24px;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.header-hoso-modal {
+  width: min(860px, 100%);
+  max-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.header-hoso-modal-head,
+.header-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+}
+
+.header-hoso-modal-head {
+  border-bottom: 1px solid var(--border);
+}
+
+.header-modal-eyebrow {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.header-hoso-modal h2 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--text-primary);
+}
+
+.header-modal-close {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  background: var(--bg-surface-2);
+  cursor: pointer;
+}
+
+.header-modal-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 20px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--input-bg);
+}
+
+.header-modal-search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+}
+
+.header-modal-body {
+  overflow: auto;
+  padding: 16px 20px 20px;
+}
+
+.header-modal-empty {
+  padding: 38px 16px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.header-hoso-list {
+  display: grid;
+  gap: 10px;
+}
+
+.header-hoso-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  background: var(--bg-surface-2);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.header-hoso-item:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.header-hoso-main,
+.header-hoso-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.header-hoso-main strong {
+  color: var(--text-primary);
+}
+
+.header-hoso-main span,
+.header-hoso-meta span {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.header-hoso-id,
+.header-hoso-hang {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  border-radius: 99px;
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--accent) !important;
+  font-weight: 800;
+}
+
+.header-hoso-status {
+  flex: 0 0 auto;
+  padding: 4px 9px;
+  border-radius: 99px;
+  font-weight: 800;
+}
+
+.header-hoso-status.is-approved,
+.header-hoso-status.is-completed {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669 !important;
+}
+
+.header-hoso-status.is-processing {
+  background: rgba(245, 158, 11, 0.14);
+  color: #d97706 !important;
+}
+
+.header-hoso-status.is-rejected {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626 !important;
+}
+
+.header-modal-footer {
+  border-top: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.header-modal-footer button {
+  min-height: 36px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  background: var(--accent);
+  font-family: var(--font-body);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.header-modal-footer button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.header-profile-modal {
+  max-width: 720px;
+}
+
+.header-profile-body {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+  overflow: auto;
+}
+
+.header-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(16, 185, 129, 0.08)),
+    var(--bg-surface-2);
+}
+
+.header-profile-avatar {
+  width: 74px;
+  height: 74px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  object-fit: cover;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), #0f766e);
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.header-profile-card h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 20px;
+}
+
+.header-profile-card p {
+  margin: 5px 0 10px;
+  color: var(--text-secondary);
+}
+
+.header-profile-status {
+  display: inline-flex;
+  padding: 5px 10px;
+  border-radius: 99px;
+  color: #059669;
+  background: rgba(16, 185, 129, 0.12);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.header-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.header-profile-field {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-surface-2);
+}
+
+.header-profile-field span,
+.header-profile-field strong {
+  display: block;
+}
+
+.header-profile-field span,
+.header-profile-permissions > span {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.header-profile-field strong {
+  margin-top: 6px;
+  color: var(--text-primary);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.header-profile-permissions {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-surface-2);
+}
+
+.header-profile-permissions div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.header-profile-permissions strong {
+  padding: 6px 9px;
+  border-radius: 99px;
+  color: var(--accent);
+  background: rgba(37, 99, 235, 0.12);
+  font-size: 12px;
+}
+
+.header-profile-permissions em {
+  color: var(--text-secondary);
+  font-style: normal;
+}
+
+@media (max-width: 760px) {
+  .header-modal-overlay {
+    padding-top: 72px;
+  }
+
+  .header-hoso-item,
+  .header-hoso-main,
+  .header-hoso-meta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .header-profile-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .header-profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0 0;
+  flex-wrap: wrap;
+}
+
+.pagination-info {
+  color: var(--text-secondary, #64748b);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.pagination-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.pagination-actions button {
+  min-width: 38px;
+  height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-surface-2);
+  color: var(--text-primary);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-actions button:hover:not(:disabled),
+.pagination-actions button.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.pagination-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
