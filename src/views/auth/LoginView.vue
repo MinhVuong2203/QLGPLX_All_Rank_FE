@@ -125,6 +125,24 @@
             <small v-if="errors.email">{{ errors.email }}</small>
           </div>
 
+          <div class="login-field">
+            <label>CCCD</label>
+
+            <div class="login-input">
+              <i class="bi bi-person-vcard-fill"></i>
+              <input
+                v-model="forgotForm.cccd"
+                type="text"
+                inputmode="numeric"
+                maxlength="12"
+                placeholder="Nhập CCCD cán bộ"
+                autocomplete="off"
+              />
+            </div>
+
+            <small v-if="errors.cccd">{{ errors.cccd }}</small>
+          </div>
+
           <button type="submit" class="login-submit">
             <span>Gửi mã OTP</span>
             <i class="bi bi-send-fill"></i>
@@ -233,6 +251,7 @@ const form = reactive({
 
 const forgotForm = reactive({
   email: '',
+  cccd: '',
 })
 
 const resetForm = reactive({
@@ -250,7 +269,7 @@ const cardTitle = computed(() => {
 })
 
 const cardDescription = computed(() => {
-  if (mode.value === 'forgot') return 'Nhập email tài khoản để nhận mã OTP 6 chữ số, hiệu lực 10 phút.'
+  if (mode.value === 'forgot') return 'Nhập email và CCCD của cán bộ để nhận mã OTP 6 chữ số, hiệu lực 10 phút.'
   if (mode.value === 'reset') return 'Nhập mã OTP trong email và mật khẩu mới để khôi phục truy cập.'
   return 'Nhập tài khoản được cấp để truy cập hệ thống.'
 })
@@ -289,6 +308,10 @@ const validateForgot = () => {
     errors.email = 'Vui lòng nhập email'
   } else if (!isValidEmail(forgotForm.email.trim())) {
     errors.email = 'Email không hợp lệ'
+  }
+
+  if (!/^\d{12}$/.test(forgotForm.cccd.trim())) {
+    errors.cccd = 'CCCD phải gồm 12 chữ số'
   }
 
   return Object.keys(errors).length === 0
@@ -349,11 +372,12 @@ const handleForgotPassword = async () => {
   try {
     await authService.forgotPassword({
       email: forgotForm.email.trim(),
+      cccd: forgotForm.cccd.trim(),
     })
 
     resetForm.email = forgotForm.email.trim()
     mode.value = 'reset'
-    toastStore.show('Nếu email tồn tại, mã OTP đã được gửi và có hiệu lực 10 phút', 'success', 'Đã gửi OTP')
+    toastStore.show('Mã OTP đã được gửi và có hiệu lực 10 phút', 'success', 'Đã gửi OTP')
   } catch (error) {
     toastStore.show(error.response?.data?.message || 'Không gửi được OTP', 'error', 'Lỗi')
   } finally {

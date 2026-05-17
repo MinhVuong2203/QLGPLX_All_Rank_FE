@@ -179,7 +179,7 @@
             </div>
             <div class="gp-info-item">
               <div class="gp-info-label">Ngày hết hạn</div>
-              <div class="gp-info-value">{{ formatDateFull(giayPhep.ngayHetHan) }}</div>
+              <div class="gp-info-value">{{ formatExpiryDateFull(giayPhep.ngayHetHan) }}</div>
             </div>
             <div class="gp-info-item">
               <div class="gp-info-label">Số điểm</div>
@@ -220,7 +220,7 @@
                 <div class="gp-timeline-license">{{ item.soGiayPhep }}</div>
                 <div class="gp-timeline-dates">
                   <span>Ngày cấp: {{ formatDate(item.ngayCapCu) }} -> {{ formatDate(item.ngayCapMoi) }}</span>
-                  <span>Hết hạn: {{ formatDate(item.ngayHetHanCu) }} -> {{ formatDate(item.ngayHetHanMoi) }}</span>
+                  <span>Hết hạn: {{ formatExpiryDate(item.ngayHetHanCu) }} -> {{ formatExpiryDate(item.ngayHetHanMoi) }}</span>
                 </div>
                 <div v-if="item.lyDo" class="gp-timeline-note">{{ item.lyDo }}</div>
               </div>
@@ -523,6 +523,10 @@ function formatDate(dateString) {
   return `${day}/${month}/${year}`
 }
 
+function formatExpiryDate(dateString) {
+  return dateString ? formatDate(dateString) : 'Không thời hạn'
+}
+
 function formatDateTime(dateString) {
   if (!dateString) return '-'
 
@@ -546,6 +550,10 @@ function formatDateFull(dateString) {
     year: 'numeric',
     weekday: 'long',
   })
+}
+
+function formatExpiryDateFull(dateString) {
+  return dateString ? formatDateFull(dateString) : 'Không thời hạn'
 }
 
 function formatAction(action) {
