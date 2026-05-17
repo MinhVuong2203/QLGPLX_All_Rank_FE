@@ -81,6 +81,7 @@
 
                   <th>Họ tên</th>
                   <th>CCCD</th>
+                  <th>Tuổi</th>
                   <th>SĐT</th>
                   <th>Trạng thái</th>
                 </tr>
@@ -108,6 +109,10 @@
 
                   <td>
                     {{ cd.cccd }}
+                  </td>
+
+                  <td>
+                    {{ getAge(cd.ngaySinh) }}
                   </td>
 
                   <td>
@@ -187,6 +192,10 @@
 
                   <p>
                     {{ hang.loaiXe }}
+                  </p>
+
+                  <p class="hang-min-age">
+                    Tuổi tối thiểu: {{ hang.doTuoiToiThieu || 0 }}
                   </p>
 
                   <div v-if="selectedMaHang === hang.maHang" class="selected-badge">✔</div>
@@ -353,8 +362,37 @@ const hasHosoWithSelectedHang = (id) => {
   return danhSachHoSo.value.some((h) => h.maCongDan === id && h.maHang === selectedMaHang.value)
 }
 
+const getAge = (dateString) => {
+  if (!dateString) return '-'
+
+  const birthDate = new Date(dateString)
+  const today = new Date()
+  let age = today.getFullYear() - birthDate.getFullYear()
+  const monthDiff = today.getMonth() - birthDate.getMonth()
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--
+  }
+
+  return age
+}
+
+const getSelectedHang = () => danhSachHang.value.find((hang) => hang.maHang === selectedMaHang.value)
+
+const isOldEnoughForHang = (congDan, hang = getSelectedHang()) => {
+  if (!hang) return true
+
+  return Number(getAge(congDan.ngaySinh)) >= Number(hang.doTuoiToiThieu || 0)
+}
+
 const toggleCongDan = (id) => {
   if (hasHosoWithSelectedHang(id)) return
+
+  const congDan = danhSachCongDan.value.find((cd) => cd.maCongDan === id)
+  if (congDan && !isOldEnoughForHang(congDan)) {
+    toastStore.show('Độ tuổi chưa đủ GPLX yêu cầu', 'warning', 'Không đủ tuổi')
+    return
+  }
 
   const index = selectedCongDans.value.indexOf(id)
 
@@ -369,14 +407,23 @@ const toggleAllCongDan = (event) => {
   const isChecked = event.target.checked
 
   if (isChecked) {
+    let blockedByAge = 0
+
     paginatedCongDan.value.forEach((cd) => {
       if (
         !hasHosoWithSelectedHang(cd.maCongDan) &&
+        isOldEnoughForHang(cd) &&
         !selectedCongDans.value.includes(cd.maCongDan)
       ) {
         selectedCongDans.value.push(cd.maCongDan)
+      } else if (!hasHosoWithSelectedHang(cd.maCongDan) && !isOldEnoughForHang(cd)) {
+        blockedByAge++
       }
     })
+
+    if (blockedByAge > 0) {
+      toastStore.show('Độ tuổi chưa đủ GPLX yêu cầu', 'warning', 'Không đủ tuổi')
+    }
   } else {
     selectedCongDans.value = []
   }
@@ -385,7 +432,9 @@ const toggleAllCongDan = (event) => {
 const isAllSelected = computed(() => {
   if (!paginatedCongDan.value.length) return false
 
-  const available = paginatedCongDan.value.filter((cd) => !hasHosoWithSelectedHang(cd.maCongDan))
+  const available = paginatedCongDan.value.filter(
+    (cd) => !hasHosoWithSelectedHang(cd.maCongDan) && isOldEnoughForHang(cd),
+  )
 
   return available.every((cd) => selectedCongDans.value.includes(cd.maCongDan))
 })
@@ -393,7 +442,15 @@ const isAllSelected = computed(() => {
 const selectHang = (hang) => {
   selectedMaHang.value = hang.maHang
 
-  selectedCongDans.value = selectedCongDans.value.filter((id) => !hasHosoWithSelectedHang(id))
+  const beforeCount = selectedCongDans.value.length
+  selectedCongDans.value = selectedCongDans.value.filter((id) => {
+    const congDan = danhSachCongDan.value.find((cd) => cd.maCongDan === id)
+    return congDan && !hasHosoWithSelectedHang(id) && isOldEnoughForHang(congDan, hang)
+  })
+
+  if (selectedCongDans.value.length < beforeCount) {
+    toastStore.show('Đã bỏ chọn công dân chưa đủ tuổi GPLX yêu cầu', 'warning', 'Không đủ tuổi')
+  }
 }
 
 const isFormValid = computed(() => {

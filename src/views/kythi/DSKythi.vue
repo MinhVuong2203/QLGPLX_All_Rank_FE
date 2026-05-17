@@ -328,13 +328,18 @@
             <div class="form-group full">
               <label>Tên kỳ thi</label>
 
-              <input v-model="editModel.tenKyThi" type="text" class="modal-input" />
+              <input
+                v-model="editModel.tenKyThi"
+                type="text"
+                class="modal-input"
+                :disabled="isEditingOngoing"
+              />
             </div>
 
             <div class="form-group">
               <label>Hạng GPLX</label>
 
-              <select v-model="editModel.maHang" class="modal-input">
+              <select v-model="editModel.maHang" class="modal-input" :disabled="isEditingOngoing">
                 <option v-for="hang in danhSachHang" :key="hang.maHang" :value="hang.maHang">
                   {{ hang.maHang }} -
                   {{ hang.tenHang }}
@@ -345,19 +350,35 @@
             <div class="form-group">
               <label>Số lượng tối đa</label>
 
-              <input v-model="editModel.soLuongToiDa" type="number" class="modal-input" />
+              <input
+                v-model.number="editModel.soLuongToiDa"
+                type="number"
+                class="modal-input"
+                :min="isEditingOngoing ? (selectedKyThi.soLuongDangKy || 0) + 1 : 1"
+              />
             </div>
 
             <div class="form-group">
               <label>Ngày bắt đầu</label>
 
-              <input v-model="editModel.ngayBatDau" type="date" class="modal-input" />
+              <input
+                v-model="editModel.ngayBatDau"
+                type="date"
+                class="modal-input"
+                :disabled="isEditingOngoing"
+                :min="todayInput"
+              />
             </div>
 
             <div class="form-group">
               <label>Ngày kết thúc</label>
 
-              <input v-model="editModel.ngayKetThuc" type="date" class="modal-input" />
+              <input
+                v-model="editModel.ngayKetThuc"
+                type="date"
+                class="modal-input"
+                :min="isEditingOngoing ? todayInput : editModel.ngayBatDau"
+              />
             </div>
 
             <div class="form-group full">
@@ -454,6 +475,9 @@ const totalRegistered = computed(() => {
   return danhSachKyThi.value.reduce((sum, k) => sum + (k.soLuongDangKy || 0), 0)
 })
 
+const todayInput = computed(() => toDateInput(new Date()))
+const isEditingOngoing = computed(() => selectedKyThi.value?.trangThai === 'Äang diá»…n ra')
+
 // Methods
 const loadHang = async () => {
   try {
@@ -486,9 +510,10 @@ const loadData = async () => {
 }
 // Hàm tính trạng thái của kỳ thi dựa trên ngày bắt đầu và kết thúc
 const getTrangThai = (k) => {
-  const today = new Date()
-  const start = new Date(k.ngayBatDau)
-  const end = new Date(k.ngayKetThuc)
+  const today = normalizeDate(new Date())
+  const start = normalizeDate(k.ngayBatDau)
+  const end = normalizeDate(k.ngayKetThuc)
+  if (end < today) return 'ÄÃ£ káº¿t thÃºc'
 
   if (today < start) return 'Sắp diễn ra'
   if (today >= start && today <= end) return 'Đang diễn ra'
@@ -520,6 +545,20 @@ const formatDate = (dateString) => {
   if (!dateString) return 'N/A'
   const date = new Date(dateString)
   return date.toLocaleDateString('vi-VN')
+}
+
+const normalizeDate = (value) => {
+  const date = new Date(value)
+  date.setHours(0, 0, 0, 0)
+  return date
+}
+
+const toDateInput = (value) => {
+  const date = new Date(value)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
 }
 
 const navigateToCreate = () => {
@@ -597,6 +636,11 @@ const closeDetailModal = () => {
 }
 
 const openEditModal = (kyThi) => {
+  if (kyThi.trangThai === 'ÄÃ£ káº¿t thÃºc') {
+    toastStore.warning('Ká»³ thi Ä‘Ã£ káº¿t thÃºc, khÃ´ng thá»ƒ chá»‰nh sá»­a')
+    return
+  }
+
   selectedKyThi.value = kyThi
 
   editModel.value = {
@@ -617,8 +661,10 @@ const closeEditModal = () => {
 }
 
 const handleUpdateKyThi = async () => {
+  if (!validateEditForm()) return
+
   try {
-    localStorage.show()
+    loadingStore.show()
     if (new Date(editModel.value.ngayKetThuc) < new Date(editModel.value.ngayBatDau)) {
       toastStore.show('Ngày kết thúc phải sau ngày bắt đầu', 'warning', 'Dữ liệu không hợp lệ')
 
@@ -639,6 +685,66 @@ const handleUpdateKyThi = async () => {
   } finally {
     loadingStore.hide()
   }
+}
+
+const validateEditForm = () => {
+  const status = selectedKyThi.value?.trangThai
+  const today = normalizeDate(new Date())
+  const startDate = normalizeDate(editModel.value.ngayBatDau)
+  const endDate = normalizeDate(editModel.value.ngayKetThuc)
+  const maxQuantity = Number(editModel.value.soLuongToiDa || 0)
+  const registered = Number(selectedKyThi.value?.soLuongDangKy || 0)
+
+  if (status === 'ÄÃ£ káº¿t thÃºc') {
+    toastStore.warning('Ky thi da ket thuc, khong the chinh sua')
+    return false
+  }
+
+  if (status === 'Äang diá»…n ra') {
+    if (endDate < today) {
+      toastStore.warning('Ngay ket thuc phai lon hon hoac bang ngay hien tai')
+      return false
+    }
+
+    if (maxQuantity <= registered) {
+      toastStore.warning('So luong toi da phai lon hon so luong da dang ky')
+      return false
+    }
+
+    return true
+  }
+
+  if (!editModel.value.tenKyThi?.trim()) {
+    toastStore.warning('Ten ky thi khong duoc de trong')
+    return false
+  }
+
+  if (editModel.value.tenKyThi.length > 150) {
+    toastStore.warning('Ten ky thi toi da 150 ky tu')
+    return false
+  }
+
+  if (!editModel.value.maHang) {
+    toastStore.warning('Hang GPLX khong duoc de trong')
+    return false
+  }
+
+  if (startDate < today) {
+    toastStore.warning('Ngay bat dau khong hop le')
+    return false
+  }
+
+  if (endDate < startDate) {
+    toastStore.warning('Ngay ket thuc phai sau ngay bat dau')
+    return false
+  }
+
+  if (maxQuantity < 1) {
+    toastStore.warning('So luong phai lon hon 0')
+    return false
+  }
+
+  return true
 }
 </script>
 

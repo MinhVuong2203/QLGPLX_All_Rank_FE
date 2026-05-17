@@ -66,6 +66,12 @@
   padding: 2rem;
 }
 
+.exam-picker-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 1rem;
+}
+
 .header-left,
 .header-right {
   display: flex;

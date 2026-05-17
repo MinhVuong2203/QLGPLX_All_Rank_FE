@@ -36,11 +36,17 @@
           </h3>
         </div>
 
-        <div class="card-body">
+        <div class="card-body exam-picker-grid">
+          <select v-model="selectedTrangThaiKyThi" class="exam-select">
+            <option value="ongoing">Đang diễn ra</option>
+            <option value="upcoming">Sắp diễn ra</option>
+            <option value="completed">Đã kết thúc</option>
+          </select>
+
           <select v-model="selectedKyThiId" @change="loadKetQua" class="exam-select">
             <option value="">-- Chọn kỳ thi --</option>
 
-            <option v-for="kt in kyThiList" :key="kt.kyThiID" :value="kt.kyThiID">
+            <option v-for="kt in filteredKyThiList" :key="kt.kyThiID" :value="kt.kyThiID">
               {{ kt.tenKyThi }} - {{ kt.maHang }}
             </option>
           </select>
@@ -560,6 +566,7 @@ const loadingStore = useLoadingStore()
 
 const kyThiList = ref([])
 const selectedKyThiId = ref('')
+const selectedTrangThaiKyThi = ref('ongoing')
 const hoSoList = ref([])
 const searchQuery = ref('')
 const filterResult = ref('')
@@ -600,6 +607,18 @@ const filteredList = computed(() => {
   return list
 })
 
+const filteredKyThiList = computed(() =>
+  kyThiList.value.filter((kyThi) => getKyThiStatusKey(kyThi) === selectedTrangThaiKyThi.value),
+)
+
+const selectedKyThi = computed(() =>
+  kyThiList.value.find((kyThi) => kyThi.kyThiID === Number(selectedKyThiId.value)),
+)
+
+const canEditSelectedKyThi = computed(
+  () => selectedKyThi.value && getKyThiStatusKey(selectedKyThi.value) === 'ongoing',
+)
+
 const totalPages = computed(() => Math.max(1, Math.ceil(filteredList.value.length / pageSize)))
 
 const paginatedList = computed(() => {
@@ -621,6 +640,12 @@ const goToPage = (page) => {
 }
 
 watch([searchQuery, filterResult, selectedKyThiId], () => {
+  currentPage.value = 1
+})
+
+watch(selectedTrangThaiKyThi, () => {
+  selectedKyThiId.value = ''
+  hoSoList.value = []
   currentPage.value = 1
 })
 
@@ -650,6 +675,22 @@ const loadKetQua = async () => {
   } finally {
     loadingStore.hide()
   }
+}
+
+const getKyThiStatusKey = (kyThi) => {
+  const today = normalizeDate(new Date())
+  const start = normalizeDate(kyThi.ngayBatDau)
+  const end = normalizeDate(kyThi.ngayKetThuc)
+
+  if (today < start) return 'upcoming'
+  if (end < today) return 'completed'
+  return 'ongoing'
+}
+
+const normalizeDate = (value) => {
+  const date = new Date(value)
+  date.setHours(0, 0, 0, 0)
+  return date
 }
 
 const getLastResult = (hoSo) => {
@@ -701,20 +742,24 @@ const openKetQuaModal = async (hoSo) => {
   // Có lịch sử thi
   if (hoSo.ketQuaThiList?.length) {
     hoSo.ketQuaThiList.forEach((kq, index) => {
-      const editable = index === hoSo.ketQuaThiList.length - 1
+      const editable = canEditSelectedKyThi.value && index === hoSo.ketQuaThiList.length - 1
 
       lanThiForms.value.push(buildAttemptState(kq, editable))
     })
   }
   // Chưa có
-  else {
+  else if (canEditSelectedKyThi.value) {
     await createFirstAttempt(hoSo.maHang)
+  } else {
+    toastStore.info('Kỳ thi này chưa có kết quả để hiển thị')
   }
 }
 
 // ================= createFirstAttempt =================
 
 const createFirstAttempt = async (maHang) => {
+  if (!canEditSelectedKyThi.value) return
+
   const res = await api.get(`/api/KetQua/${maHang}/monthi`)
 
   lanThiForms.value.push({
@@ -751,6 +796,11 @@ const createFirstAttempt = async (maHang) => {
 // ================= SAVE =================
 
 const saveAttempt = async (attempt) => {
+  if (!canEditSelectedKyThi.value || !attempt.editable) {
+    toastStore.warning('Kỳ thi này chỉ được xem kết quả, không thể chỉnh sửa')
+    return null
+  }
+
   loadingStore.show()
 
   try {
@@ -865,6 +915,11 @@ const saveAttempt = async (attempt) => {
 // ================= CREATE NEXT ATTEMPT =================
 
 const handleCreateNextAttempt = async (currentAttempt) => {
+  if (!canEditSelectedKyThi.value || !currentAttempt.editable) {
+    toastStore.warning('Kỳ thi này chỉ được xem kết quả, không thể chỉnh sửa')
+    return
+  }
+
   const hasNonZeroScore = currentAttempt.chiTiet.some((mon) => mon.diem > 0)
 
   if (hasNonZeroScore) {

@@ -385,8 +385,114 @@ function scrollToAction() {
   })
 }
 
-function printLicense() {
-  window.print()
+async function printLicense() {
+  const cards = Array.from(document.querySelectorAll('.gplx-card'))
+
+  if (cards.length === 0) {
+    toastStore.error('Khong tim thay GPLX de in')
+    return
+  }
+
+  const iframe = document.createElement('iframe')
+  iframe.style.position = 'fixed'
+  iframe.style.right = '0'
+  iframe.style.bottom = '0'
+  iframe.style.width = '0'
+  iframe.style.height = '0'
+  iframe.style.border = '0'
+  iframe.setAttribute('aria-hidden', 'true')
+  document.body.appendChild(iframe)
+
+  const printDocument = iframe.contentDocument
+  const styleNodes = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
+    .map((node) => node.outerHTML)
+    .join('')
+
+  const cardHtml = cards
+    .map((card) => `<section class="print-card-item">${card.outerHTML}</section>`)
+    .join('')
+
+  printDocument.open()
+  printDocument.write(`
+    <!doctype html>
+    <html>
+      <head>
+        <meta charset="utf-8" />
+        <title>In GPLX</title>
+        ${styleNodes}
+        <style>
+          @page {
+            size: A4 landscape;
+            margin: 12mm;
+          }
+
+          * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+
+          body {
+            margin: 0;
+            background: #ffffff;
+          }
+
+          .print-license-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14mm;
+            width: 100%;
+          }
+
+          .print-card-item {
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+
+          .print-card-item .gplx-card {
+            width: 520px !important;
+            box-shadow: none !important;
+            transform: none !important;
+          }
+        </style>
+      </head>
+      <body>
+        <main class="print-license-page">
+          ${cardHtml}
+        </main>
+      </body>
+    </html>
+  `)
+  printDocument.close()
+
+  await waitForPrintAssets(printDocument)
+
+  iframe.contentWindow.focus()
+  iframe.contentWindow.print()
+
+  setTimeout(() => {
+    iframe.remove()
+  }, 1000)
+}
+
+function waitForPrintAssets(printDocument) {
+  const images = Array.from(printDocument.images)
+
+  if (images.length === 0) {
+    return Promise.resolve()
+  }
+
+  return Promise.all(
+    images.map((image) => {
+      if (image.complete) return Promise.resolve()
+
+      return new Promise((resolve) => {
+        image.onload = resolve
+        image.onerror = resolve
+      })
+    }),
+  )
 }
 
 function getDisplayStatus(license) {
