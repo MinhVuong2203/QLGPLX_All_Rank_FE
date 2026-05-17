@@ -33,7 +33,7 @@
   --bg-surface: #ffffff;
   --bg-surface-2: #f8fafc;
   --bg-overlay: rgba(255, 255, 255, 0.85);
-  --sidebar-bg: linear-gradient(120deg, #3d6ed6 0%, #e0e0e060 100%);
+  --sidebar-bg: rgba(244, 246, 251, 0.8);
   --sidebar-border: #e8ecf3;
   --sidebar-text: #4b5563;
   --sidebar-text-active: #ffffff;
