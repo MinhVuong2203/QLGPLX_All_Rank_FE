@@ -513,7 +513,7 @@ const getTrangThai = (k) => {
   const today = normalizeDate(new Date())
   const start = normalizeDate(k.ngayBatDau)
   const end = normalizeDate(k.ngayKetThuc)
-  if (end < today) return 'ÄÃ£ káº¿t thÃºc'
+  if (end < today) return 'Đã kết thúc'
 
   if (today < start) return 'Sắp diễn ra'
   if (today >= start && today <= end) return 'Đang diễn ra'
