@@ -1245,6 +1245,19 @@ body {
   margin-bottom: 8px;
 }
 
+.footer-logo-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
 .footer-logo svg {
   width: 30px;
   height: 30px;
@@ -1289,6 +1302,11 @@ body {
   font-size: 0.8rem;
   color: var(--text-muted);
   transition: color var(--transition);
+}
+
+.footer-col span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 
 .footer-col a:hover {
