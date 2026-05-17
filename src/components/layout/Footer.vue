@@ -12,41 +12,41 @@ const currentYear = new Date().getFullYear()
         </div>
 
         <p class="footer-tagline">
-          He thong quan ly giay phep lai xe, ho so, ky thi va ket qua sat hach.
+          Hệ thống quản lý giấy phép lái xe, hồ sơ, kỳ thi và kết quả sát hạch.
         </p>
       </div>
 
       <div class="footer-links">
         <div class="footer-col">
-          <h4>He thong</h4>
+          <h4>Hệ thống</h4>
 
-          <router-link to="/">Tong quan</router-link>
-          <router-link to="/cong-dan">Cong dan</router-link>
-          <router-link to="/ho-so">Ho so</router-link>
+          <router-link to="/">Tổng quan</router-link>
+          <router-link to="/cong-dan">Công dân</router-link>
+          <router-link to="/ho-so">Hồ sơ</router-link>
         </div>
 
         <div class="footer-col">
-          <h4>Nghiep vu</h4>
+          <h4>Nghiệp vụ</h4>
 
-          <router-link to="/ky-thi">Ky thi</router-link>
-          <router-link to="/ket-qua">Ket qua</router-link>
-          <router-link to="/giay-phep">Giay phep</router-link>
+          <router-link to="/ky-thi">Kỳ thi</router-link>
+          <router-link to="/ket-qua">Kết quả</router-link>
+          <router-link to="/giay-phep">Giấy phép</router-link>
         </div>
 
         <div class="footer-col">
-          <h4>Van hanh</h4>
+          <h4>Vận hành</h4>
 
-          <router-link to="/can-bo">Can bo</router-link>
-          <span>Ho tro nghiep vu GPLX</span>
+          <router-link to="/can-bo">Cán bộ</router-link>
+          <span>Hỗ trợ nghiệp vụ GPLX</span>
         </div>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <span>(c) {{ currentYear }} GPLX Manager</span>
+      <span>© {{ currentYear }} GPLX Manager</span>
       <span class="footer-status">
         <span class="status-dot"></span>
-        San sang xu ly ho so
+        Sẵn sàng xử lý hồ sơ
       </span>
     </div>
   </footer>

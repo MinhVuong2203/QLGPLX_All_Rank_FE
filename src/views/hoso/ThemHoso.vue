@@ -190,7 +190,7 @@
                     {{ hang.tenHang }}
                   </h5>
 
-                  <p>
+                  <p style="margin: 0;">
                     {{ hang.loaiXe }}
                   </p>
 
