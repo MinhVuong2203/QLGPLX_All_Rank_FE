@@ -1,11 +1,8 @@
 import axios from 'axios'
 
-// const api = axios.create({
-//   baseURL: import.meta.env.VITE_API_BASE_URL
-// })
-
 const api = axios.create({
-  baseURL: 'https://qlgplxallrank-production.up.railway.app'})
+  baseURL: import.meta.env.VITE_API_BASE_URL
+})
 
 api.interceptors.request.use(
   (config) => {
