@@ -130,7 +130,7 @@ const goToEditProfile = () => {
 
     <div class="header-center">
       <div class="header-search">
-        <i class="bi bi-search search-icon"></i>
+        <!-- <i class="bi bi-search search-icon"></i> -->
         <input
           v-model="headerSearch"
           class="search-input"
@@ -168,12 +168,11 @@ const goToEditProfile = () => {
           <span class="user-role">{{ authStore.canBo?.tenChucVu }}</span>
         </div>
 
-        <div v-if="showDropdown" class="user-dropdown">
-          <button type="button" class="dropdown-item header-profile-link" @click.stop="openProfileModal">
-            <i class="bi bi-person-vcard"></i>
+        <div v-if="showDropdown" class="user-dropdown">  
+          <button class="header-profile-link" @click.stop="openProfileModal">
+            <i class="bi bi-person-vcard"></i> 
             Hồ sơ
           </button>
-
           <button class="header-logout-btn" @click.stop="handleLogout">
             <i class="bi bi-box-arrow-right"></i>
             Đăng xuất
@@ -255,9 +254,7 @@ const goToEditProfile = () => {
 
         <div class="header-modal-footer">
           <span>Thông tin lấy từ tài khoản cán bộ đang đăng nhập</span>
-          <button type="button" :disabled="!canBo.publicId" @click="goToEditProfile">
-            Chỉnh sửa hồ sơ
-          </button>
+         
         </div>
       </section>
     </div>

@@ -33,7 +33,7 @@
   --bg-surface: #ffffff;
   --bg-surface-2: #f8fafc;
   --bg-overlay: rgba(255, 255, 255, 0.85);
-  --sidebar-bg: linear-gradient(120deg, #7d0ffa63 0%, #0f85fa57 100%);
+  --sidebar-bg: linear-gradient(120deg, #3d6ed6 0%, #e0e0e060 100%);
   --sidebar-border: #e8ecf3;
   --sidebar-text: #4b5563;
   --sidebar-text-active: #ffffff;
@@ -1737,18 +1737,19 @@ body {
   animation-delay: 0.2s;
 }
 
-.header-logout-btn {
+.header-logout-btn, .header-profile-link {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  width: 100%;
   min-height: 38px;
   padding: 8px 14px;
+  margin-bottom: 6px;
   border: 1px solid var(--border);
   border-radius: 12px;
   color: var(--text-primary);
   background: var(--bg-surface-2);
   font-family: var(--font-body);
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   transition: all var(--transition);
 }
@@ -1757,14 +1758,11 @@ body {
   color: var(--danger);
   border-color: var(--danger);
 }
-
-.header-profile-link {
-  width: 100%;
-  border: 0;
-  background: transparent;
-  font-family: var(--font-body);
-  cursor: pointer;
+.header-profile-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
 }
+
 
 .header-modal-overlay {
   position: fixed;

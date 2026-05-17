@@ -2,7 +2,7 @@ export const menuItems = [
   {
     path: '/',
     label: 'TỔNG QUAN',
-    icon: 'https://cdn.lordicon.com/zldpstex.json',
+    icon: 'https://cdn.lordicon.com/rpvomrgr.json',
     permission: null,
     state: null,
   },
@@ -44,7 +44,7 @@ export const menuItems = [
   {
     path: '/can-bo',
     label: 'CÁN BỘ',
-    icon: 'https://cdn.lordicon.com/xvfgwmmv.json',
+    icon: 'https://cdn.lordicon.com/zzimtcyz.json',
     permission: 'QUAN_LY_CAN_BO',
     state: null,
   },

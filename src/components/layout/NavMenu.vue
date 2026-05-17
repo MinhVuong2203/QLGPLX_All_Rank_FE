@@ -29,7 +29,7 @@
           delay="100"
           stroke="bold"
           :state="item.state"
-          colors="primary:#242424,secondary:#e83a30"
+          colors="primary:#e8e230,secondary:#c7c116"
           class="nav-icon"
         >
         </lord-icon>
