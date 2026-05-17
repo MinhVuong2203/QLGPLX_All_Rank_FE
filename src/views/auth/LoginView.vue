@@ -12,28 +12,28 @@
           <img src="@/assets/image/logo.png" alt="Logo" class="login-logo-image" />
         </div>
 
-        <h1>Ung dung Quan ly GPLX</h1>
-        <p>He thong quan ly giay phep lai xe tat ca cac hang</p>
+        <h1>Ứng dụng Quản lý GPLX</h1>
+        <p>Hệ thống quản lý giấy phép lái xe tất cả các hạng</p>
 
         <div class="login-feature-list">
           <div>
             <i class="bi bi-check-circle-fill"></i>
-            Thu tuc ho so don gian va nhanh chong
+            Thủ tục hồ sơ đơn giản và nhanh chóng
           </div>
 
           <div>
             <i class="bi bi-check-circle-fill"></i>
-            Ky thi sat hach linh hoat, da dang
+            Kỳ thi sát hạch linh hoạt, đa dạng
           </div>
 
           <div>
             <i class="bi bi-check-circle-fill"></i>
-            Cap giay phep lai xe dien tu tien loi
+            Cấp giấy phép lái xe điện tử tiện lợi
           </div>
 
           <div>
             <i class="bi bi-check-circle-fill"></i>
-            Ho tro tra cuu thong tin nhanh chong
+            Hỗ trợ tra cứu thông tin nhanh chóng
           </div>
         </div>
       </div>
@@ -55,14 +55,14 @@
 
         <template v-if="mode === 'login'">
           <div class="login-field">
-            <label>Tai khoan hoac email</label>
+            <label>Tài khoản hoặc email</label>
 
             <div class="login-input">
               <i class="bi bi-person-fill"></i>
               <input
                 v-model="form.usernameOrEmail"
                 type="text"
-                placeholder="Username hoac email"
+                placeholder="Username hoặc email"
                 autocomplete="username"
               />
             </div>
@@ -71,7 +71,7 @@
           </div>
 
           <div class="login-field">
-            <label>Mat khau</label>
+            <label>Mật khẩu</label>
 
             <div class="login-input">
               <i class="bi bi-lock-fill"></i>
@@ -79,7 +79,7 @@
               <input
                 v-model="form.password"
                 :type="showPassword ? 'text' : 'password'"
-                placeholder="Nhap mat khau"
+                placeholder="Nhập mật khẩu"
                 autocomplete="current-password"
               />
 
@@ -92,7 +92,7 @@
           </div>
 
           <button type="submit" class="login-submit">
-            <span>Dang nhap</span>
+            <span>Đăng nhập</span>
             <lord-icon
               src="https://cdn.lordicon.com/usydzudq.json"
               trigger="loop"
@@ -102,22 +102,22 @@
           </button>
 
           <button type="button" class="login-text-action" @click="switchMode('forgot')">
-            Quen mat khau?
+            Quên mật khẩu?
           </button>
 
-          <div class="login-note">Chi can bo duoc cap tai khoan moi co the thao tac</div>
+          <div class="login-note">Chỉ cán bộ được cấp tài khoản mới có thể thao tác</div>
         </template>
 
         <template v-else-if="mode === 'forgot'">
           <div class="login-field">
-            <label>Email tai khoan</label>
+            <label>Email tài khoản</label>
 
             <div class="login-input">
               <i class="bi bi-envelope-fill"></i>
               <input
                 v-model="forgotForm.email"
                 type="email"
-                placeholder="Nhap email can bo"
+                placeholder="Nhập email cán bộ"
                 autocomplete="email"
               />
             </div>
@@ -126,25 +126,25 @@
           </div>
 
           <button type="submit" class="login-submit">
-            <span>Gui ma OTP</span>
+            <span>Gửi mã OTP</span>
             <i class="bi bi-send-fill"></i>
           </button>
 
           <button type="button" class="login-text-action" @click="switchMode('login')">
-            Quay lai dang nhap
+            Quay lại đăng nhập
           </button>
         </template>
 
         <template v-else>
           <div class="login-field">
-            <label>Email tai khoan</label>
+            <label>Email tài khoản</label>
 
             <div class="login-input">
               <i class="bi bi-envelope-fill"></i>
               <input
                 v-model="resetForm.email"
                 type="email"
-                placeholder="Nhap email da nhan OTP"
+                placeholder="Nhập email đã nhận OTP"
                 autocomplete="email"
               />
             </div>
@@ -153,7 +153,7 @@
           </div>
 
           <div class="login-field">
-            <label>Ma OTP</label>
+            <label>Mã OTP</label>
 
             <div class="login-input">
               <i class="bi bi-key-fill"></i>
@@ -162,7 +162,7 @@
                 type="text"
                 inputmode="numeric"
                 maxlength="6"
-                placeholder="6 chu so"
+                placeholder="6 chữ số"
                 autocomplete="one-time-code"
               />
             </div>
@@ -171,14 +171,14 @@
           </div>
 
           <div class="login-field">
-            <label>Mat khau moi</label>
+            <label>Mật khẩu mới</label>
 
             <div class="login-input">
               <i class="bi bi-lock-fill"></i>
               <input
                 v-model="resetForm.newPassword"
                 :type="showResetPassword ? 'text' : 'password'"
-                placeholder="Nhap mat khau moi"
+                placeholder="Nhập mật khẩu mới"
                 autocomplete="new-password"
               />
 
@@ -191,12 +191,12 @@
           </div>
 
           <button type="submit" class="login-submit">
-            <span>Dat lai mat khau</span>
+            <span>Đặt lại mật khẩu</span>
             <i class="bi bi-check-circle-fill"></i>
           </button>
 
           <button type="button" class="login-text-action" @click="switchMode('forgot')">
-            Gui lai OTP
+            Gửi lại OTP
           </button>
         </template>
       </form>
@@ -244,15 +244,15 @@ const resetForm = reactive({
 const errors = reactive({})
 
 const cardTitle = computed(() => {
-  if (mode.value === 'forgot') return 'Quen mat khau'
-  if (mode.value === 'reset') return 'Nhap ma OTP'
-  return 'Dang nhap'
+  if (mode.value === 'forgot') return 'Quên mật khẩu'
+  if (mode.value === 'reset') return 'Nhập mã OTP'
+  return 'Đăng nhập'
 })
 
 const cardDescription = computed(() => {
-  if (mode.value === 'forgot') return 'Nhap email tai khoan de nhan ma OTP 6 chu so, hieu luc 10 phut.'
-  if (mode.value === 'reset') return 'Nhap ma OTP trong email va mat khau moi de khoi phuc truy cap.'
-  return 'Nhap tai khoan duoc cap de truy cap he thong.'
+  if (mode.value === 'forgot') return 'Nhập email tài khoản để nhận mã OTP 6 chữ số, hiệu lực 10 phút.'
+  if (mode.value === 'reset') return 'Nhập mã OTP trong email và mật khẩu mới để khôi phục truy cập.'
+  return 'Nhập tài khoản được cấp để truy cập hệ thống.'
 })
 
 const resetErrors = () => {
@@ -272,11 +272,11 @@ const validateLogin = () => {
   resetErrors()
 
   if (!form.usernameOrEmail.trim()) {
-    errors.usernameOrEmail = 'Vui long nhap tai khoan hoac email'
+    errors.usernameOrEmail = 'Vui lòng nhập tài khoản hoặc email'
   }
 
   if (!form.password.trim()) {
-    errors.password = 'Vui long nhap mat khau'
+    errors.password = 'Vui lòng nhập mật khẩu'
   }
 
   return Object.keys(errors).length === 0
@@ -286,9 +286,9 @@ const validateForgot = () => {
   resetErrors()
 
   if (!forgotForm.email.trim()) {
-    errors.email = 'Vui long nhap email'
+    errors.email = 'Vui lòng nhập email'
   } else if (!isValidEmail(forgotForm.email.trim())) {
-    errors.email = 'Email khong hop le'
+    errors.email = 'Email không hợp lệ'
   }
 
   return Object.keys(errors).length === 0
@@ -298,17 +298,17 @@ const validateReset = () => {
   resetErrors()
 
   if (!resetForm.email.trim()) {
-    errors.email = 'Vui long nhap email'
+    errors.email = 'Vui lòng nhập email'
   } else if (!isValidEmail(resetForm.email.trim())) {
-    errors.email = 'Email khong hop le'
+    errors.email = 'Email không hợp lệ'
   }
 
   if (!/^\d{6}$/.test(resetForm.otpCode.trim())) {
-    errors.otpCode = 'OTP phai gom 6 chu so'
+    errors.otpCode = 'OTP phải gồm 6 chữ số'
   }
 
   if (resetForm.newPassword.length < 6) {
-    errors.newPassword = 'Mat khau moi phai co it nhat 6 ky tu'
+    errors.newPassword = 'Mật khẩu mới phải có ít nhất 6 ký tự'
   }
 
   return Object.keys(errors).length === 0
@@ -331,11 +331,11 @@ const handleLogin = async () => {
       password: form.password,
     })
 
-    toastStore.show('Dang nhap thanh cong', 'success', 'Thanh cong')
+    toastStore.show('Đăng nhập thành công', 'success', 'Thành công')
 
     router.push('/')
   } catch (error) {
-    toastStore.show(error.response?.data?.message || 'Dang nhap that bai', 'error', 'Loi dang nhap')
+    toastStore.show(error.response?.data?.message || 'Đăng nhập thất bại', 'error', 'Lỗi đăng nhập')
   } finally {
     loadingStore.hide()
   }
@@ -353,9 +353,9 @@ const handleForgotPassword = async () => {
 
     resetForm.email = forgotForm.email.trim()
     mode.value = 'reset'
-    toastStore.show('Neu email ton tai, ma OTP da duoc gui va co hieu luc 10 phut', 'success', 'Da gui OTP')
+    toastStore.show('Nếu email tồn tại, mã OTP đã được gửi và có hiệu lực 10 phút', 'success', 'Đã gửi OTP')
   } catch (error) {
-    toastStore.show(error.response?.data?.message || 'Khong gui duoc OTP', 'error', 'Loi')
+    toastStore.show(error.response?.data?.message || 'Không gửi được OTP', 'error', 'Lỗi')
   } finally {
     loadingStore.hide()
   }
@@ -378,9 +378,9 @@ const handleResetPassword = async () => {
     resetForm.otpCode = ''
     resetForm.newPassword = ''
     mode.value = 'login'
-    toastStore.show('Dat lai mat khau thanh cong. Vui long dang nhap lai', 'success', 'Thanh cong')
+    toastStore.show('Đặt lại mật khẩu thành công. Vui lòng đăng nhập lại', 'success', 'Thành công')
   } catch (error) {
-    toastStore.show(error.response?.data?.message || 'Dat lai mat khau that bai', 'error', 'Loi')
+    toastStore.show(error.response?.data?.message || 'Đặt lại mật khẩu thất bại', 'error', 'Lỗi')
   } finally {
     loadingStore.hide()
   }
