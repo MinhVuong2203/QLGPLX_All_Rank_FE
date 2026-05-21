@@ -8,6 +8,10 @@ const api = axios.create({
   baseURL: 'https://qlgplxallrank-production.up.railway.app'
 })
 
+// const api = axios.create({
+//   baseURL: 'https://localhost:7033'
+// })
+
 
 api.interceptors.request.use(
   (config) => {

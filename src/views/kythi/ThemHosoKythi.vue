@@ -89,12 +89,14 @@
               class="ho-so-item"
               :class="{
                 selected: selectedHoSo.includes(hs.hoSoID),
-                disabled: hs.daDangKyKyThi,
+                disabled: isHoSoDisabled(hs),
               }"
               @click="toggleSelection(hs)"
             >
               <div class="ho-so-checkbox">
-                <i v-if="hs.daDangKyKyThi" class="bi bi-check-circle-fill text-success"></i>
+                <i v-if="isKyThiEnded" class="bi bi-lock-fill text-secondary"></i>
+
+                <i v-else-if="hs.daDangKyKyThi" class="bi bi-check-circle-fill text-success"></i>
 
                 <i v-else-if="selectedHoSo.includes(hs.hoSoID)" class="bi bi-check-square-fill"></i>
 
@@ -120,6 +122,8 @@
                 </div>
 
                 <div v-if="hs.daDangKyKyThi" class="badge-registered">Đã đăng ký</div>
+
+                <div v-else-if="isKyThiEnded" class="badge-registered">Kỳ thi đã kết thúc</div>
               </div>
             </div>
           </div>
@@ -195,7 +199,7 @@
                 <button
                   type="button"
                   class="btn-add-all"
-                  :disabled="isSubmitting"
+                  :disabled="isSubmitting || isKyThiEnded"
                   @click="handleAddHoSo"
                 >
                   <template v-if="isSubmitting">
@@ -306,6 +310,12 @@ const pageSize = ref(5)
 const currentPageRegistered = ref(1)
 const pageSizeRegistered = ref(5)
 
+const isKyThiEnded = computed(() => {
+  if (!kyThiInfo.value?.ngayKetThuc) return false
+
+  return normalizeDate(kyThiInfo.value.ngayKetThuc) < normalizeDate(new Date())
+})
+
 const showLoading = () => {
   loadingStore.show()
 }
@@ -402,7 +412,7 @@ const pagedRegistered = computed(() => {
 })
 
 const toggleSelection = (hs) => {
-  if (hs.daDangKyKyThi) return
+  if (isHoSoDisabled(hs)) return
 
   const index = selectedHoSo.value.indexOf(hs.hoSoID)
 
@@ -422,6 +432,16 @@ const clearSelection = () => {
 }
 
 const handleAddHoSo = async () => {
+  if (isKyThiEnded.value) {
+    toastStore.show(
+      'Kỳ thi đã kết thúc, không thể thêm thí sinh',
+      'warning',
+      'Không thể thực hiện',
+    )
+
+    return
+  }
+
   if (!selectedHoSo.value.length) {
     toastStore.show('Vui lòng chọn ít nhất một hồ sơ', 'warning', 'Thiếu dữ liệu')
 
@@ -504,5 +524,15 @@ const prevPageRegistered = () => {
 
 const goBack = () => {
   router.push('/ky-thi')
+}
+
+const isHoSoDisabled = (hs) => {
+  return isKyThiEnded.value || hs.daDangKyKyThi
+}
+
+const normalizeDate = (value) => {
+  const date = new Date(value)
+  date.setHours(0, 0, 0, 0)
+  return date
 }
 </script>

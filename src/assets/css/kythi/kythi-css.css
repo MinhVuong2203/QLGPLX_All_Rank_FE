@@ -82,10 +82,34 @@
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  background: var(--accent);
+  color: white;
+  animation: float 0.3s ease;
 }
 
 .btn-primary i {
   font-size: 1.1rem;
+}
+
+.btn-secondary {
+  color: white;
+  background: var(--danger);
+  border: none;
+  padding: 0.875rem 1.75rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all var(--transition);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* ─────────────────────── LOADING & EMPTY STATES ─────────────────────── */
