@@ -358,13 +358,11 @@ const loadHoSoDaDuyet = async () => {
 
     const res = await api.get(`/api/KyThi/hoso-da-duyet?maHang=${maHang}`)
 
-    hoSoDaDuyet.value = res.data
-
     const idsInKyThi = hoSoTrongKyThi.value.map((x) => x.hoSoID)
 
-    hoSoDaDuyet.value.forEach((hs) => {
-      hs.daDangKyKyThi = idsInKyThi.includes(hs.hoSoID)
-    })
+    hoSoDaDuyet.value = (res.data || []).filter(
+      (hs) => !idsInKyThi.includes(hs.hoSoID) && !hs.daDangKyKyThi,
+    )
   } catch (err) {
     console.error(err)
 
@@ -383,8 +381,6 @@ const loadHoSoTrongKyThi = async () => {
 }
 
 const filteredHoSo = computed(() => {
-  const idsInKyThi = hoSoTrongKyThi.value.map((x) => x.hoSoID)
-
   return hoSoDaDuyet.value.filter((h) => {
     const matchSearch =
       !searchText.value ||
@@ -395,7 +391,7 @@ const filteredHoSo = computed(() => {
 
     const matchTo = !toDate.value || new Date(h.ngayNop) <= new Date(toDate.value)
 
-    return !idsInKyThi.includes(h.hoSoID) && matchSearch && matchFrom && matchTo
+    return matchSearch && matchFrom && matchTo
   })
 })
 
