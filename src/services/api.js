@@ -4,13 +4,13 @@ import axios from 'axios'
 //   baseURL: import.meta.env.VITE_API_BASE_URL
 // })
 
-// const api = axios.create({
-//   baseURL: 'https://qlgplxallrank-production.up.railway.app'
-// })
-
 const api = axios.create({
-  baseURL: 'http://localhost:5254'
+  baseURL: 'https://qlgplxallrank-production.up.railway.app'
 })
+
+// const api = axios.create({
+//   baseURL: 'http://localhost:5254'
+// })
 
 
 api.interceptors.request.use(
