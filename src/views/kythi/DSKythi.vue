@@ -160,7 +160,12 @@
                 <i class="bi bi-pencil"></i>
                 Sửa
               </button>
-              <button class="btn-action delete" @click="deleteKyThi(kyThi.kyThiID)">
+              <button
+                class="btn-action delete"
+                :disabled="!canDeleteKyThi(kyThi)"
+                :title="canDeleteKyThi(kyThi) ? 'Xóa kỳ thi' : 'Chỉ được xóa kỳ thi sắp diễn ra'"
+                @click="deleteKyThi(kyThi)"
+              >
                 <i class="bi bi-trash"></i>
                 Xóa
               </button>
@@ -577,12 +582,21 @@ const navigateToAddHoSo = (id) => {
   router.push(`/ky-thi/${id}/them-ho-so`)
 }
 
-const deleteKyThi = async (id) => {
+const canDeleteKyThi = (kyThi) => {
+  return normalizeDate(kyThi.ngayBatDau) > normalizeDate(new Date())
+}
+
+const deleteKyThi = async (kyThi) => {
+  if (!canDeleteKyThi(kyThi)) {
+    toastStore.warning('Chỉ được xóa kỳ thi sắp diễn ra')
+    return
+  }
+
   if (!confirm('Bạn có chắc muốn xóa?')) return
 
   try {
     loadingStore.show()
-    const response = await api.delete(`/api/KyThi/${id}`)
+    const response = await api.delete(`/api/KyThi/${kyThi.kyThiID}`)
 
     if (response.status === 200) {
       toastStore.success('Xóa kỳ thi thành công!')
@@ -592,7 +606,7 @@ const deleteKyThi = async (id) => {
     }
   } catch (error) {
     console.error(error)
-    toastStore.error('Đã xảy ra lỗi khi xóa!')
+    toastStore.error(error.response?.data?.message || 'Đã xảy ra lỗi khi xóa!')
   } finally {
     loadingStore.hide()
   }
