@@ -472,7 +472,11 @@ const handleAddHoSo = async () => {
   } catch (err) {
     console.error(err)
 
-    toastStore.show('Đã xảy ra lỗi khi thêm hồ sơ', 'error', 'Lỗi hệ thống')
+    toastStore.show(
+      err.response?.data?.message || 'Đã xảy ra lỗi khi thêm hồ sơ',
+      'error',
+      'Lỗi hệ thống',
+    )
   } finally {
     isSubmitting.value = false
 
