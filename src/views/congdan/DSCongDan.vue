@@ -43,7 +43,7 @@
                 stroke-linecap="round"
               />
             </svg>
-            <input type="date" v-model="selectedDate" class="date-input" />
+            <input type="date" v-model="selectedDate" class="date-input" @change="filterData" />
           </div>
         </div>
 
@@ -238,7 +238,7 @@ const toastStore = useToastStore()
 const congdan = ref([])
 const filteredCongdan = ref([])
 const searchCCCD = ref('')
-const selectedDate = ref(new Date().toISOString().split('T')[0])
+const selectedDate = ref(toDateInputValue())
 
 // Pagination
 const currentPage = ref(1)
@@ -274,7 +274,7 @@ function filterData() {
   } else {
     filteredCongdan.value = congdan.value.filter((cd) => {
       if (!cd.ngayTao) return true
-      const ngayTaoDate = new Date(cd.ngayTao).toISOString().split('T')[0]
+      const ngayTaoDate = getDateOnly(cd.ngayTao)
       return ngayTaoDate === selectedDate.value
     })
   }
@@ -283,9 +283,27 @@ function filterData() {
 
 function resetFilter() {
   searchCCCD.value = ''
-  selectedDate.value = new Date().toISOString().split('T')[0]
+  selectedDate.value = toDateInputValue()
   filteredCongdan.value = congdan.value
   currentPage.value = 1
+}
+
+function toDateInputValue(date = new Date()) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+function getDateOnly(value) {
+  if (!value) return ''
+
+  if (typeof value === 'string') {
+    const match = value.match(/^(\d{4}-\d{2}-\d{2})/)
+    if (match) return match[1]
+  }
+
+  return toDateInputValue(new Date(value))
 }
 
 async function deleteCongdan(id) {
