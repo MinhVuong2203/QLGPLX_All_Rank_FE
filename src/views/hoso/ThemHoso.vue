@@ -22,6 +22,73 @@
           <div class="section-header">
             <div class="step-badge">Bước 1</div>
 
+            <h2 class="section-title">Chọn hạng giấy phép lái xe</h2>
+          </div>
+
+          <div class="section-content">
+            <div class="hang-grid">
+              <div v-for="hang in danhSachHang" :key="hang.maHang" class="hang-border">
+                <div
+                  class="hang-card"
+                  :class="{
+                    selected: selectedMaHang === hang.maHang,
+                  }"
+                  @click="selectHang(hang)"
+                >
+                  <div class="hang-badge">
+                    {{ hang.maHang }}
+                  </div>
+
+                  <h5>
+                    {{ hang.tenHang }}
+                  </h5>
+
+                  <p style="margin: 0;">
+                    {{ hang.loaiXe }}
+                  </p>
+
+                  <p class="hang-min-age">
+                    Tuổi tối thiểu: {{ hang.doTuoiToiThieu || 0 }}
+                  </p>
+
+                  <div v-if="selectedMaHang === hang.maHang" class="selected-badge">✔</div>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="selectedMaHang && dieuKienDangKy" class="eligibility-panel">
+              <div class="eligibility-title">
+                Điều kiện đăng ký hạng {{ selectedMaHang }}
+              </div>
+
+              <p class="eligibility-message">
+                {{ dieuKienDangKy.thongBao }}
+              </p>
+
+              <ul v-if="dieuKienDangKy.coYeuCauGiayPhepKhac" class="eligibility-list">
+                <li v-for="dk in dieuKienDangKy.dieuKiens" :key="dk.hangBatBuocId">
+                  <strong>{{ dk.hangBatBuocId }}</strong>
+                  <span v-if="dk.tenHangBatBuoc"> - {{ dk.tenHangBatBuoc }}</span>
+                  <span v-if="dk.namToiThieu > 0">
+                    , tối thiểu {{ dk.namToiThieu }} năm từ ngày cấp
+                  </span>
+                </li>
+              </ul>
+
+              <div v-if="dieuKienDangKy.coYeuCauGiayPhepKhac" class="eligibility-note">
+                GPLX điều kiện phải không ở trạng thái Chờ duyệt, không bị thu hồi/0 điểm,
+                chưa hết hạn và đủ số năm tối thiểu.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+
+        <div class="form-section">
+          <div class="section-header">
+            <div class="step-badge">Bước 2</div>
+
             <h2 class="section-title">Chọn công dân</h2>
           </div>
 
@@ -97,7 +164,10 @@
                     <input
                       type="checkbox"
                       :checked="selectedCongDans.includes(cd.maCongDan)"
-                      :disabled="hasHosoWithSelectedHang(cd.maCongDan)"
+                      :disabled="
+                        hasHosoWithSelectedHang(cd.maCongDan) ||
+                        (selectedMaHang && isKnownIneligible(cd.maCongDan))
+                      "
                       @click.stop
                       @change="toggleCongDan(cd.maCongDan)"
                     />
@@ -125,6 +195,20 @@
                       class="status-badge status-exists"
                     >
                       Đã có hồ sơ
+                    </span>
+
+                    <span
+                      v-else-if="selectedMaHang && isKnownIneligible(cd.maCongDan)"
+                      class="status-badge status-ineligible"
+                    >
+                      Không đủ điều kiện
+                    </span>
+
+                    <span
+                      v-else-if="selectedMaHang && isKnownEligible(cd.maCongDan)"
+                      class="status-badge status-eligible"
+                    >
+                      Đủ điều kiện
                     </span>
 
                     <span v-else class="status-badge status-available"> Chưa đăng ký </span>
@@ -158,48 +242,6 @@
                 >
                   Sau
                 </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- STEP 2 -->
-
-        <div class="form-section">
-          <div class="section-header">
-            <div class="step-badge">Bước 2</div>
-
-            <h2 class="section-title">Chọn hạng giấy phép lái xe</h2>
-          </div>
-
-          <div class="section-content">
-            <div class="hang-grid">
-              <div v-for="hang in danhSachHang" :key="hang.maHang" class="hang-border">
-                <div
-                  class="hang-card"
-                  :class="{
-                    selected: selectedMaHang === hang.maHang,
-                  }"
-                  @click="selectHang(hang)"
-                >
-                  <div class="hang-badge">
-                    {{ hang.maHang }}
-                  </div>
-
-                  <h5>
-                    {{ hang.tenHang }}
-                  </h5>
-
-                  <p style="margin: 0;">
-                    {{ hang.loaiXe }}
-                  </p>
-
-                  <p class="hang-min-age">
-                    Tuổi tối thiểu: {{ hang.doTuoiToiThieu || 0 }}
-                  </p>
-
-                  <div v-if="selectedMaHang === hang.maHang" class="selected-badge">✔</div>
-                </div>
               </div>
             </div>
           </div>
@@ -259,6 +301,8 @@ const loading = ref(false)
 const selectedCongDans = ref([])
 const selectedMaHang = ref('')
 const ghiChu = ref('')
+const dieuKienDangKy = ref(null)
+const eligibilityByCongDan = ref({})
 
 const toastStore = useToastStore()
 const loadingStore = useLoadingStore()
@@ -323,6 +367,10 @@ const loadCongDan = async () => {
 
     danhSachCongDan.value = response.data
     currentPage.value = 1
+
+    if (selectedMaHang.value) {
+      await preloadEligibilityForCongDans(danhSachCongDan.value)
+    }
   } catch (err) {
     console.error(err)
 
@@ -354,12 +402,88 @@ const pageEnd = computed(() => Math.min(currentPage.value * pageSize, danhSachCo
 
 const goToPage = (page) => {
   currentPage.value = Math.min(Math.max(page, 1), totalPages.value)
+
+  if (selectedMaHang.value) {
+    preloadEligibilityForCongDans(paginatedCongDan.value)
+  }
 }
 
 const hasHosoWithSelectedHang = (id) => {
   if (!selectedMaHang.value) return false
 
   return danhSachHoSo.value.some((h) => h.maCongDan === id && h.maHang === selectedMaHang.value)
+}
+
+const getEligibility = (id) => eligibilityByCongDan.value[id]
+
+const isUnderAgeForSelectedHang = (id) => {
+  const congDan = danhSachCongDan.value.find((cd) => cd.maCongDan === id)
+  return Boolean(selectedMaHang.value && congDan && !isOldEnoughForHang(congDan))
+}
+
+const isKnownIneligible = (id) => {
+  return isUnderAgeForSelectedHang(id) || getEligibility(id)?.duDieuKien === false
+}
+
+const isKnownEligible = (id) => {
+  return !isUnderAgeForSelectedHang(id) && getEligibility(id)?.duDieuKien === true
+}
+
+const loadDieuKienDangKy = async () => {
+  if (!selectedMaHang.value) {
+    dieuKienDangKy.value = null
+    return null
+  }
+
+  const response = await api.get('/api/Hoso/dieu-kien-dang-ky', {
+    params: { maHang: selectedMaHang.value },
+  })
+
+  dieuKienDangKy.value = response.data
+  return response.data
+}
+
+const checkEligibility = async (maCongDan) => {
+  if (!selectedMaHang.value) return { duDieuKien: true }
+
+  if (eligibilityByCongDan.value[maCongDan]) {
+    return eligibilityByCongDan.value[maCongDan]
+  }
+
+  const response = await api.get('/api/Hoso/dieu-kien-dang-ky', {
+    params: {
+      maCongDan,
+      maHang: selectedMaHang.value,
+    },
+  })
+
+  eligibilityByCongDan.value[maCongDan] = response.data
+  return response.data
+}
+
+const preloadEligibilityForCongDans = async (congDans) => {
+  if (!selectedMaHang.value) return
+
+  const canKiemTra = congDans.filter(
+    (cd) =>
+      !hasHosoWithSelectedHang(cd.maCongDan) &&
+      isOldEnoughForHang(cd) &&
+      !eligibilityByCongDan.value[cd.maCongDan],
+  )
+
+  await Promise.all(
+    canKiemTra.map(async (cd) => {
+      try {
+        await checkEligibility(cd.maCongDan)
+      } catch (err) {
+        console.error(err)
+        eligibilityByCongDan.value[cd.maCongDan] = {
+          duDieuKien: false,
+          thongBao: 'Không thể kiểm tra điều kiện GPLX',
+        }
+      }
+    }),
+  )
 }
 
 const getAge = (dateString) => {
@@ -385,8 +509,15 @@ const isOldEnoughForHang = (congDan, hang = getSelectedHang()) => {
   return Number(getAge(congDan.ngaySinh)) >= Number(hang.doTuoiToiThieu || 0)
 }
 
-const toggleCongDan = (id) => {
+const toggleCongDan = async (id) => {
   if (hasHosoWithSelectedHang(id)) return
+
+  const index = selectedCongDans.value.indexOf(id)
+
+  if (index > -1) {
+    selectedCongDans.value.splice(index, 1)
+    return
+  }
 
   const congDan = danhSachCongDan.value.find((cd) => cd.maCongDan === id)
   if (congDan && !isOldEnoughForHang(congDan)) {
@@ -394,35 +525,59 @@ const toggleCongDan = (id) => {
     return
   }
 
-  const index = selectedCongDans.value.indexOf(id)
-
-  if (index > -1) {
-    selectedCongDans.value.splice(index, 1)
-  } else {
-    selectedCongDans.value.push(id)
+  if (selectedMaHang.value) {
+    try {
+      const eligibility = await checkEligibility(id)
+      if (!eligibility.duDieuKien) {
+        toastStore.show(eligibility.thongBao, 'warning', 'Không đủ điều kiện')
+        return
+      }
+    } catch (err) {
+      console.error(err)
+      toastStore.show('Không thể kiểm tra điều kiện GPLX', 'error', 'Lỗi hệ thống')
+      return
+    }
   }
+
+  selectedCongDans.value.push(id)
 }
 
-const toggleAllCongDan = (event) => {
+const toggleAllCongDan = async (event) => {
   const isChecked = event.target.checked
 
   if (isChecked) {
     let blockedByAge = 0
+    let blockedByCondition = 0
 
-    paginatedCongDan.value.forEach((cd) => {
-      if (
-        !hasHosoWithSelectedHang(cd.maCongDan) &&
-        isOldEnoughForHang(cd) &&
-        !selectedCongDans.value.includes(cd.maCongDan)
-      ) {
-        selectedCongDans.value.push(cd.maCongDan)
-      } else if (!hasHosoWithSelectedHang(cd.maCongDan) && !isOldEnoughForHang(cd)) {
-        blockedByAge++
+    for (const cd of paginatedCongDan.value) {
+      if (hasHosoWithSelectedHang(cd.maCongDan) || selectedCongDans.value.includes(cd.maCongDan)) {
+        continue
       }
-    })
+
+      if (!isOldEnoughForHang(cd)) {
+        blockedByAge++
+        continue
+      }
+
+      try {
+        const eligibility = await checkEligibility(cd.maCongDan)
+        if (eligibility.duDieuKien) {
+          selectedCongDans.value.push(cd.maCongDan)
+        } else {
+          blockedByCondition++
+        }
+      } catch (err) {
+        console.error(err)
+        blockedByCondition++
+      }
+    }
 
     if (blockedByAge > 0) {
       toastStore.show('Độ tuổi chưa đủ GPLX yêu cầu', 'warning', 'Không đủ tuổi')
+    }
+
+    if (blockedByCondition > 0) {
+      toastStore.show('Một số công dân chưa đủ điều kiện GPLX bắt buộc', 'warning', 'Không đủ điều kiện')
     }
   } else {
     selectedCongDans.value = []
@@ -433,23 +588,59 @@ const isAllSelected = computed(() => {
   if (!paginatedCongDan.value.length) return false
 
   const available = paginatedCongDan.value.filter(
-    (cd) => !hasHosoWithSelectedHang(cd.maCongDan) && isOldEnoughForHang(cd),
+    (cd) =>
+      !hasHosoWithSelectedHang(cd.maCongDan) &&
+      isOldEnoughForHang(cd) &&
+      !isKnownIneligible(cd.maCongDan),
   )
 
   return available.every((cd) => selectedCongDans.value.includes(cd.maCongDan))
 })
 
-const selectHang = (hang) => {
+const selectHang = async (hang) => {
   selectedMaHang.value = hang.maHang
+  eligibilityByCongDan.value = {}
+
+  try {
+    await loadDieuKienDangKy()
+    await preloadEligibilityForCongDans(danhSachCongDan.value)
+  } catch (err) {
+    console.error(err)
+    dieuKienDangKy.value = null
+    toastStore.show('Không thể tải điều kiện đăng ký GPLX', 'error', 'Lỗi hệ thống')
+  }
 
   const beforeCount = selectedCongDans.value.length
-  selectedCongDans.value = selectedCongDans.value.filter((id) => {
+  const hopLeTheoTuoi = selectedCongDans.value.filter((id) => {
     const congDan = danhSachCongDan.value.find((cd) => cd.maCongDan === id)
     return congDan && !hasHosoWithSelectedHang(id) && isOldEnoughForHang(congDan, hang)
   })
 
-  if (selectedCongDans.value.length < beforeCount) {
+  const hopLeSauDieuKien = []
+  let blockedByCondition = 0
+
+  for (const id of hopLeTheoTuoi) {
+    try {
+      const eligibility = await checkEligibility(id)
+      if (eligibility.duDieuKien) {
+        hopLeSauDieuKien.push(id)
+      } else {
+        blockedByCondition++
+      }
+    } catch (err) {
+      console.error(err)
+      blockedByCondition++
+    }
+  }
+
+  selectedCongDans.value = hopLeSauDieuKien
+
+  if (hopLeTheoTuoi.length < beforeCount) {
     toastStore.show('Đã bỏ chọn công dân chưa đủ tuổi GPLX yêu cầu', 'warning', 'Không đủ tuổi')
+  }
+
+  if (blockedByCondition > 0) {
+    toastStore.show('Đã bỏ chọn công dân chưa đủ điều kiện GPLX bắt buộc', 'warning', 'Không đủ điều kiện')
   }
 }
 
@@ -472,6 +663,22 @@ const submitForm = async () => {
 
   try {
     showLoading()
+
+    const invalidCongDans = []
+
+    for (const id of selectedCongDans.value) {
+      const congDan = danhSachCongDan.value.find((cd) => cd.maCongDan === id)
+      const eligibility = await checkEligibility(id)
+
+      if (!congDan || !isOldEnoughForHang(congDan) || !eligibility.duDieuKien) {
+        invalidCongDans.push(id)
+      }
+    }
+
+    if (invalidCongDans.length > 0) {
+      toastStore.show('Có công dân chưa đủ điều kiện tạo hồ sơ GPLX', 'warning', 'Không đủ điều kiện')
+      return
+    }
 
     let success = 0
     let fail = 0
