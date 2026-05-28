@@ -18,16 +18,6 @@
             <p>Quản lý và theo dõi các giấy phép lái xe đã cấp</p>
           </div>
         </div>
-        <button class="gp-btn gp-btn-primary" @click="$router.push('/giay-phep/them')">
-          <lord-icon
-            src="https://cdn.lordicon.com/jgnvfzqg.json"
-            trigger="hover"
-            colors="primary:#ffffff"
-            style="width: 20px; height: 20px"
-          >
-          </lord-icon>
-          Cấp giấy phép mới
-        </button>
       </div>
 
       <!-- Statistics Cards -->
